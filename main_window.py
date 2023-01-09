@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtSql
 import sys
+
+from PyQt5.QtCore import QAbstractItemModel
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QPushButton, QHBoxLayout, \
     QVBoxLayout, QDesktopWidget, QLabel, QTableWidget
 from dialog_student import AddStudent
 from dialog_book import AddBook
 from connector_student import TableStudent
 from connector_book import TableBook
+
+
 # from connector import Connector
 
 
@@ -41,10 +45,10 @@ class Main(QMainWindow):
         h0_box.addStretch()
 
         # Делаем вертикальный макет
-        v0_box = QVBoxLayout()
-        v0_box.addLayout(h0_box)
-        v0_box.addWidget(label_student)
-        v0_box.addWidget(self.table_student)
+        self.v0_box = QVBoxLayout()
+        self.v0_box.addLayout(h0_box)
+        self.v0_box.addWidget(label_student)
+        self.v0_box.addWidget(self.table_student)
 
         """Правая сторона окна"""
         # Задаем виджеты
@@ -81,7 +85,7 @@ class Main(QMainWindow):
 
         """Соединяем левую и правую часть"""
         h3_box = QHBoxLayout()
-        h3_box.addLayout(v0_box)
+        h3_box.addLayout(self.v0_box)
         h3_box.addLayout(v1_box)
 
         # Переносим макеты в окно
@@ -92,10 +96,14 @@ class Main(QMainWindow):
         """Добавляем функционал"""
         # Кнопка добавить студента
         add_student.clicked.connect(self.update_table)
+        search_student.clicked.connect(self.update_table)
+        self.table_student.doubleClicked.connect(self.clickedRowColumn)
 
         # Кнопка добавить книгу
         add_book.clicked.connect(AddBook)
 
+    def clickedRowColumn(self, r):
+        print(r)
     def center(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
@@ -104,8 +112,9 @@ class Main(QMainWindow):
 
     def update_table(self):
         AddStudent()
-        self.table_student.update()
-
+        self.v0_box.removeWidget(self.table_student)
+        self.table_student = TableStudent()
+        self.v0_box.insertWidget(2, self.table_student)
 
 
 if __name__ == '__main__':
