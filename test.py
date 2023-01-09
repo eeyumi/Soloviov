@@ -1,53 +1,46 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 import sys
-from PyQt6.QtWidgets import (
-    QApplication, QMainWindow, QTableWidget,
-    QTableWidgetItem, QDockWidget, QFormLayout,
-    QLineEdit, QWidget, QPushButton, QSpinBox,
-    QMessageBox, QToolBar, QMessageBox
-)
-from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QIcon, QAction
 
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QTableView
+from PyQt5.QtGui import QStandardItem, QStandardItemModel
+from PyQt5.QtCore import QSortFilterProxyModel
 
-class MainWindow(QMainWindow):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.setWindowTitle('Employees')
-        self.setWindowIcon(QIcon('./assets/usergroup.png'))
-        self.setGeometry(100, 100, 600, 400)
+class MySortFilterProxyModel(QSortFilterProxyModel):
+    def lessThan(self, source_left, source_right):
+        if (source_left.isValid() and source_right.isValid()):
+            if (source_left.column() == 1):    # <== номер колонки с числами
+                return int(source_left.data()) < int(source_right.data())
+        return super(MySortFilterProxyModel, self).lessThan(source_left, source_right)
 
-        employees = [
-            {'First Name': 'John', 'Last Name': 'Doe', 'Age': 25},
-            {'First Name': 'Jane', 'Last Name': 'Doe', 'Age': 22},
-            {'First Name': 'Alice', 'Last Name': 'Doe', 'Age': 22},
-        ]
+class Window(QMainWindow):
+    def __init__(self, parent=None):
+        super(Window, self).__init__(parent)
+        self.setGeometry(300, 200, 500, 400)
 
-        self.table = QTableWidget(self)
-        self.setCentralWidget(self.table)
+        w_view = QTableView(self)
+        w_model = QStandardItemModel(self)
+        w_model.setHorizontalHeaderLabels(['Деталь', 'Длина', 'Поставщик'])
+        w_proxy = MySortFilterProxyModel(self)
+        w_proxy.setSourceModel(w_model)
+        w_view.setModel(w_proxy)
+        w_view.setSortingEnabled(True)
 
-        self.table.setColumnCount(3)
-        self.table.setColumnWidth(0, 150)
-        self.table.setColumnWidth(1, 150)
-        self.table.setColumnWidth(2, 50)
+        rows = [['Стойка', 200, 'Фабрика'],
+                ['Штанга', 10, 'Завод'],
+                ['Перекладина', 5, 'Мастерская']
+               ]
 
-        self.table.setHorizontalHeaderLabels(employees[0].keys())
-        self.table.setRowCount(len(employees))
+        for row in rows:
+            w_model.appendRow([QStandardItem(row[0]),
+                               QStandardItem(str(row[1])),
+                               QStandardItem(row[2])])
+        self.setCentralWidget(w_view)
 
-        row = 0
-        for e in employees:
-            self.table.setItem(row, 0, QTableWidgetItem(e['First Name']))
-            self.table.setItem(row, 1, QTableWidgetItem(e['Last Name']))
-            self.table.setItem(row, 2, QTableWidgetItem(str(e['Age'])))
-            row += 1
+myapp = QApplication(sys.argv)
+window = Window()
+window.show()
 
-
-
-
-
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
+myapp.exec_()
+sys.exit()
