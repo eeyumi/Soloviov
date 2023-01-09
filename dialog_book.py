@@ -19,7 +19,7 @@ class AddBook(QDialog):
         # Задаем виджеты
         label_name = QLabel("Название:")
         label_author = QLabel("Автор:    ")
-        label_type = QLabel("Тип:       ")
+        label_type = QLabel("Описание:       ")
         label_release = QLabel("Дата выпуска:")
 
         self.line_name = QLineEdit()
@@ -33,7 +33,7 @@ class AddBook(QDialog):
         # Задаем длину виджета
         self.line_name.setFixedWidth(400)
 
-        reg_fio = QRegExp("[А-я]*")
+        reg_fio = QRegExp("[А-я, ]*")
         validator_fio = QRegExpValidator(reg_fio)
         self.line_author.setValidator(validator_fio)
 
@@ -104,6 +104,9 @@ class AddBook(QDialog):
             msg.setIcon(QMessageBox.Warning)
             msg.exec_()
         else:
-            book = Connect()
-            book.add_book(self.line_name.text(), self.line_author.text(), self.line_type.text(), self.line_release.text())
-            self.accept()
+            authors = self.line_author.text().replace(', ', ',').replace(' ,', ',').split(',')
+            # print(len(authors))
+            for i in range(len(authors)):
+                book = Connect()
+                book.add_book(self.line_name.text(), authors[i], self.line_type.text(), self.line_release.text())
+                self.accept()
