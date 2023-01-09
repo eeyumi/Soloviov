@@ -79,5 +79,5 @@ class AddBook(QDialog):
         print(self.line_name.text())
         print(self.line_author.text())
         print(self.line_type.text())
-        book.add_book(self.line_name.text(), self.line_author.text(), self.line_type.text())
+        book.add_book(self.line_name.text(), self.line_author.text(), self.line_type.text(), self.line_release.text())
         self.accept()

@@ -10,7 +10,7 @@ class Connect:
         value_line = f"{numer_grade_book}, '{fullname}', '{squad}', {course}"
         self.make_request("students", "numer_grade_book, fullname, squad, course", value_line)
 
-    def add_book(self, after, title, release, type_book):
+    def add_book(self, title, after, type_book, release):
         value_line = f"'{title}',{release} , '{type_book}'"
 
 
