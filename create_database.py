@@ -8,19 +8,19 @@ id_books INTEGER PRIMARY KEY AUTOINCREMENT,
 title VARCHAR(60),
 --author VARCHAR(40),
 release INTEGER,
-type_book INTEGER,
+type_book TEXT,
 FOREIGN KEY (type_book)  REFERENCES type_book (id_type));
 """
 )
 sqlite_connection.commit()
 
-cursor.execute(
-"""CREATE TABLE IF NOT EXiSTS type_book(
-id_type INTEGER PRIMARY KEY AUTOINCREMENT,
-title TEXT UNIQUE);
-"""
-)
-sqlite_connection.commit()
+# cursor.execute(
+# """CREATE TABLE IF NOT EXiSTS type_book(
+# id_type INTEGER PRIMARY KEY AUTOINCREMENT,
+# title  UNIQUE);
+# """
+# )
+# sqlite_connection.commit()
 
 cursor.execute(
 """ CREATE TABLE IF NOT EXISTS authors(
