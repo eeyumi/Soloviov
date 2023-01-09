@@ -105,7 +105,7 @@ class AddStudent(QDialog):
 
     def save(self):
         student = Connect()
-        student.make_request_to_add_student(self.line_number.text(), self.line_surname.text()+" "+self.line_name.text()+" "+self.line_patronymic.text(), self.text_group, self.text_course)
+        student.add_student(self.line_number.text(), self.line_surname.text()+" "+self.line_name.text()+" "+self.line_patronymic.text(), self.text_group, self.text_course)
         self.accept()
 
 

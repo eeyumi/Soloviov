@@ -44,7 +44,7 @@ sqlite_connection.commit()
 cursor.execute(
 """ CREATE TABLE IF NOT EXISTS students(
 numer_grade_book INTEGER PRIMARY KEY,
-fullname TEXT,
+fullname VARCHAR(40),
 squad VARCHAR(6),
 course INTEGER);
 """
