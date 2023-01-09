@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-import sqlite3
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit, QComboBox
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit, QComboBox, QMessageBox
 from PyQt5 import QtCore
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
@@ -104,9 +102,31 @@ class AddStudent(QDialog):
         self.text_course = text
 
     def save(self):
-        student = Connect()
-        student.add_student(self.line_number.text(), self.line_surname.text()+" "+self.line_name.text()+" "+self.line_patronymic.text(), self.text_group, self.text_course)
-        self.accept()
+        list_error = []
+        bool_error = False
+        if self.line_number.text() == "":
+            list_error.append("Вы не указали номер зачетной книжки!\n")
+            bool_error = True
+        if self.line_surname.text() == "":
+            list_error.append("Вы не указали фамилию студента!\n")
+            bool_error = True
+        if self.line_name.text() == "":
+            list_error.append("Вы не указали имя студента!\n")
+            bool_error = True
+        if self.line_patronymic.text() == "":
+            list_error.append("Вы не указали отчество студента!\n")
+            bool_error = True
+        if bool_error:
+            msg = QMessageBox()
+            msg.setWindowTitle("Внимание!")
+            text_error = ''.join(list_error)
+            msg.setText(text_error[:-1])
+            msg.setIcon(QMessageBox.Warning)
+            msg.exec_()
+        else:
+            student = Connect()
+            student.add_student(self.line_number.text(), self.line_surname.text()+" "+self.line_name.text()+" "+self.line_patronymic.text(), self.text_group, self.text_course)
+            self.accept()
 
 
 
