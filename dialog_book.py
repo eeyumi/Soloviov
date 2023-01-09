@@ -20,10 +20,12 @@ class AddBook(QDialog):
         label_name = QLabel("Название:")
         label_author = QLabel("Автор:    ")
         label_type = QLabel("Тип:       ")
+        label_release = QLabel("Дата выпуска:")
 
         self.line_name = QLineEdit()
         self.line_author = QLineEdit()
         self.line_type = QLineEdit()
+        self.line_release = QLineEdit()
 
         cancellation = QPushButton("Отмена")
         save = QPushButton("Сохранить")
@@ -45,8 +47,12 @@ class AddBook(QDialog):
         h2_box.addWidget(self.line_type)
 
         h3_box = QHBoxLayout()
-        h3_box.addWidget(cancellation)
-        h3_box.addWidget(save)
+        h3_box.addWidget(label_release)
+        h3_box.addWidget(self.line_release)
+
+        h4_box = QHBoxLayout()
+        h4_box.addWidget(cancellation)
+        h4_box.addWidget(save)
 
         # Создаем вертикальный макет
         v_box = QVBoxLayout(self)
@@ -54,6 +60,7 @@ class AddBook(QDialog):
         v_box.addLayout(h1_box)
         v_box.addLayout(h2_box)
         v_box.addLayout(h3_box)
+        v_box.addLayout(h4_box)
 
         # Добавляем функционал
         cancellation.clicked.connect(self.accept)
@@ -65,12 +72,6 @@ class AddBook(QDialog):
         # Добавляем макет в окно
         self.setLayout(v_box)
         self.exec_()
-
-    def current_text_group(self, text):
-        self.text_group = text
-
-    def current_text_course(self, text):
-        self.text_course = text
 
     def save(self):
         print("hi")
