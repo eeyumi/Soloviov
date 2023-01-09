@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit, QComboBox
 from PyQt5 import QtCore
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 from interface import Connect
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit, QComboBox, QMessageBox
 
 class AddBook(QDialog):
     def __init__(self):
@@ -33,6 +33,10 @@ class AddBook(QDialog):
         # Задаем длину виджета
         self.line_name.setFixedWidth(400)
 
+        reg_fio = QRegExp("[А-я]*")
+        validator_fio = QRegExpValidator(reg_fio)
+        self.line_author.setValidator(validator_fio)
+
         # Создаем горизонтальные макеты
         h0_box = QHBoxLayout()
         h0_box.addWidget(label_name)
@@ -45,6 +49,10 @@ class AddBook(QDialog):
         h2_box = QHBoxLayout()
         h2_box.addWidget(label_type)
         h2_box.addWidget(self.line_type)
+
+        reg_number = QRegExp("[0-9]{4,4}")
+        validator_number = QRegExpValidator(reg_number)
+        self.line_release.setValidator(validator_number)
 
         h3_box = QHBoxLayout()
         h3_box.addWidget(label_release)
@@ -74,10 +82,28 @@ class AddBook(QDialog):
         self.exec_()
 
     def save(self):
-        print("hi")
-        book = Connect()
-        print(self.line_name.text())
-        print(self.line_author.text())
-        print(self.line_type.text())
-        book.add_book(self.line_name.text(), self.line_author.text(), self.line_type.text(), self.line_release.text())
-        self.accept()
+        list_error = []
+        bool_error = False
+        if self.line_name.text() == "":
+            list_error.append("Вы не указали название книги!\n")
+            bool_error = True
+        if self.line_author.text() == "":
+            list_error.append("Вы не указали автора!\n")
+            bool_error = True
+        if self.line_type.text() == "":
+            list_error.append("Вы не указали короткое описание (два-три слова)!\n")
+            bool_error = True
+        if self.line_release.text() == "":
+            list_error.append("Вы не указали год выпуска!\n")
+            bool_error = True
+        if bool_error:
+            msg = QMessageBox()
+            msg.setWindowTitle("Внимание!")
+            text_error = ''.join(list_error)
+            msg.setText(text_error[:-1])
+            msg.setIcon(QMessageBox.Warning)
+            msg.exec_()
+        else:
+            book = Connect()
+            book.add_book(self.line_name.text(), self.line_author.text(), self.line_type.text(), self.line_release.text())
+            self.accept()
