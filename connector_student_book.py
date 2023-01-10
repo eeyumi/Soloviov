@@ -23,7 +23,7 @@ class TableStudentBook(QTableView):
                     model.setItem(rows, 0, QStandardItem(title))
                     model.setItem(rows, 1, QStandardItem(str(id_BOOK)))
                     model.setItem(rows, 2, QStandardItem(str(date_receipt[:10])))
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -32,6 +32,6 @@ class TableStudentBook(QTableView):
 class MySortFilterProxyModel(QSortFilterProxyModel):
     def lessThan(self, source_left, source_right):
         if (source_left.isValid() and source_right.isValid()):
-            if (source_left.column() == 2):  # <== номер колонки с числами
+            if (source_left.column() == 1):  # <== номер колонки с числами
                 return int(source_left.data()) < int(source_right.data())
         return super(MySortFilterProxyModel, self).lessThan(source_left, source_right)

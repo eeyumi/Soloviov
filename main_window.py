@@ -30,7 +30,7 @@ class Main(QMainWindow):
         self.table_boh = TableStudentBook()
         # Задали окно
         self.setWindowTitle("Библиотека")
-        #self.showFullScreen()
+        self.showFullScreen()
 
 
         """Левая сторона окна"""

@@ -1,5 +1,5 @@
 from PyQt5 import QtSql
-from PyQt5.QtWidgets import QTableView, QAbstractItemView
+from PyQt5.QtWidgets import QTableView, QAbstractItemView, QHeaderView
 from PyQt5.QtCore import QSortFilterProxyModel
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 
@@ -21,7 +21,8 @@ class TableBook(QTableView):
             model.setItem(rows, 0, QStandardItem(query.value(0)))
             model.setItem(rows, 1, QStandardItem(str(query.value(1))))
             model.setItem(rows, 2, QStandardItem(query.value(2)))
-        self.resizeColumnsToContents()
+        self.setFixedWidth(1200)
+        self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -30,7 +31,6 @@ class TableBook(QTableView):
 class MySortFilterProxyModel(QSortFilterProxyModel):
     def lessThan(self, source_left, source_right):
         if (source_left.isValid() and source_right.isValid()):
-            if (source_left.column() == 2):
-                source_left.data()
+            if (source_left.column() == 2):  # <== номер колонки с числами
                 return int(source_left.data()[:1]) < int(source_right.data()[:1])
         return super(MySortFilterProxyModel, self).lessThan(source_left, source_right)

@@ -1,6 +1,6 @@
 
 from PyQt5.QtSql import QSqlQuery
-from PyQt5.QtWidgets import QTableView, QAbstractItemView
+from PyQt5.QtWidgets import QTableView, QAbstractItemView, QHeaderView
 from PyQt5.QtCore import QSortFilterProxyModel
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 
@@ -25,7 +25,8 @@ class SearchBook(QTableView):
             model.setItem(rows, 0, QStandardItem(query.value(0)))
             model.setItem(rows, 1, QStandardItem(str(query.value(1))))
             model.setItem(rows, 2, QStandardItem(query.value(2)))
-        self.resizeColumnsToContents()
+        self.setFixedWidth(1200)
+        self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
