@@ -29,7 +29,7 @@ class AddBook(QDialog):
         label_type.setStyleSheet(self.style.label())
         label_release = QLabel("Дата выпуска:\t")
         label_release.setStyleSheet(self.style.label())
-        label_count = QLabel("Кол-во экземпляров:\t")
+        label_count = QLabel("Кол-во экземпляров: ")
         label_count.setStyleSheet(self.style.label())
 
         self.line_name = QLineEdit()
@@ -41,7 +41,8 @@ class AddBook(QDialog):
         self.line_release = QLineEdit()
         self.line_release.setStyleSheet(self.style.line_edit1())
         self.line_count = QLineEdit()
-        self.line_count.setStyleSheet(self.style.line_edit1())
+        self.line_count.setStyleSheet(self.style.line_edit2())
+        self.line_count.setMaximumWidth(50)
 
         self.check_release = QCheckBox("Без даты")
         self.check_release.setStyleSheet(self.style.check_box())
@@ -93,6 +94,7 @@ class AddBook(QDialog):
         h4_box = QHBoxLayout()
         h4_box.addWidget(label_count)
         h4_box.addWidget(self.line_count)
+        h4_box.addStretch()
 
         h5_box = QHBoxLayout()
         h5_box.addWidget(cancellation)

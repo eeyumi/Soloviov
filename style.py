@@ -141,6 +141,18 @@ class Style:
         style_line_edit = "QLineEdit" + curly_braces(button)
         return style_line_edit
 
+    def line_edit2(self):
+        """Стиль поиска"""
+        button = f"""
+            color: rgb{self.color_widget};
+            border-width: 0.5px;
+            border-style: solid;
+            background-color: rgb(255, 255, 255);
+            border-color: rgb{self.color_widget};
+        """
+        style_line_edit = "QLineEdit" + curly_braces(button)
+        return style_line_edit
+
     def label(self):
         """Стиль строчек"""
         style_label = f'''
