@@ -133,7 +133,9 @@ class Main(QMainWindow):
         numer_grade_book = (a.get_student(self.table_student.model().index(r.row(), column).data(),
                                     self.table_student.model().index(r.row(), column + 1).data(),
                                     self.table_student.model().index(r.row(), column + 2).data())[0])
-        print(numer_grade_book)
+        self.v1_box.removeWidget(self.table_boh)
+        self.table_boh = TableStudentBook(numer_grade_book)
+        self.v1_box.insertWidget(5, self.table_boh)
 
     def center(self):
         qr = self.frameGeometry()
