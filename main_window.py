@@ -4,7 +4,7 @@ import sys
 
 from PyQt5.QtCore import QAbstractItemModel
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QPushButton, QHBoxLayout, \
-    QVBoxLayout, QDesktopWidget, QLabel, QTableWidget
+    QVBoxLayout, QDesktopWidget, QLabel, QTableWidget, QLineEdit
 from dialog_student import AddStudent
 from dialog_book import AddBook
 from connector_student import TableStudent
@@ -53,7 +53,9 @@ class Main(QMainWindow):
         """Правая сторона окна"""
         # Задаем виджеты
         add_book = QPushButton("Добавить")
-        search_book = QPushButton("Поиск")
+        lable_book = QLabel("Найти по названию книги: ")
+        line_search_book = QLineEdit()
+        # line_search_book.stateChanged.connect(self._stateChanged_slot_release)
         label_library = QLabel("Библиотека:")
         label_boh = QLabel(
             "Книги на руках:")  # boh - books on hand (книги на руках) P.s Да-да, с соображалкой у меня туго)))
@@ -66,7 +68,8 @@ class Main(QMainWindow):
         h1_box = QHBoxLayout()
         h1_box.addStretch()
         h1_box.addWidget(add_book)
-        h1_box.addWidget(search_book)
+        h1_box.addWidget(lable_book)
+        h1_box.addWidget(line_search_book)
         h1_box.addStretch()
 
         h2_box = QHBoxLayout()

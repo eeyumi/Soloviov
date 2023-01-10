@@ -3,7 +3,7 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 from interface import Connect
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit, QComboBox, QMessageBox
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit, QComboBox, QMessageBox, QCheckBox
 
 class AddBook(QDialog):
     def __init__(self):
@@ -17,15 +17,21 @@ class AddBook(QDialog):
         self.setWindowFlag(QtCore.Qt.MSWindowsFixedSizeDialogHint)
 
         # Задаем виджеты
-        label_name = QLabel("Название:")
-        label_author = QLabel("Автор:    ")
-        label_type = QLabel("Описание:       ")
-        label_release = QLabel("Дата выпуска:")
+        label_name = QLabel("Название:\t")
+        label_author = QLabel("Автор:\t\t")
+        label_type = QLabel("Описание:\t")
+        label_release = QLabel("Дата выпуска:\t")
 
         self.line_name = QLineEdit()
         self.line_author = QLineEdit()
         self.line_type = QLineEdit()
         self.line_release = QLineEdit()
+
+        self.check_release = QCheckBox("Без даты")
+        self.check_author = QCheckBox("Без автора")
+
+        self.check_release.stateChanged.connect(self._stateChanged_slot_release)
+        self.check_author.stateChanged.connect(self._stateChanged_slot_author)
 
         cancellation = QPushButton("Отмена")
         save = QPushButton("Сохранить")
@@ -45,6 +51,7 @@ class AddBook(QDialog):
         h1_box = QHBoxLayout()
         h1_box.addWidget(label_author)
         h1_box.addWidget(self.line_author)
+        h1_box.addWidget(self.check_author)
 
         h2_box = QHBoxLayout()
         h2_box.addWidget(label_type)
@@ -57,6 +64,8 @@ class AddBook(QDialog):
         h3_box = QHBoxLayout()
         h3_box.addWidget(label_release)
         h3_box.addWidget(self.line_release)
+        h3_box.addWidget(self.check_release)
+
 
         h4_box = QHBoxLayout()
         h4_box.addWidget(cancellation)
@@ -81,19 +90,27 @@ class AddBook(QDialog):
         self.setLayout(v_box)
         self.exec_()
 
+    def _stateChanged_slot_release(self):
+        self.line_release.setReadOnly(not self.line_release.isReadOnly())
+        self.line_release.setText("")
+
+    def _stateChanged_slot_author(self):
+        self.line_author.setReadOnly(not self.line_author.isReadOnly())
+        self.line_author.setText("")
+
     def save(self):
         list_error = []
         bool_error = False
         if self.line_name.text() == "":
             list_error.append("Вы не указали название книги!\n")
             bool_error = True
-        if self.line_author.text() == "":
+        if self.line_author.text() == "" and not self.check_author.isChecked():
             list_error.append("Вы не указали автора!\n")
             bool_error = True
-        if self.line_type.text() == "":
+        if self.line_type.text() == ""  :
             list_error.append("Вы не указали короткое описание (два-три слова)!\n")
             bool_error = True
-        if self.line_release.text() == "":
+        if self.line_release.text() == "" and not self.check_release.isChecked():
             list_error.append("Вы не указали год выпуска!\n")
             bool_error = True
         if bool_error:
@@ -104,8 +121,15 @@ class AddBook(QDialog):
             msg.setIcon(QMessageBox.Warning)
             msg.exec_()
         else:
-            authors = self.line_author.text().replace(', ', ',').replace(' ,', ',').split(',')
+            if self.check_author.isChecked():
+                authors = ["Без автора"]
+                print(authors)
+            else:
+                authors = self.line_author.text().replace(', ', ',').replace(' ,', ',').split(',')
             # print(len(authors))
+            if self.check_release.isChecked():
+                self.line_release.setText("0000")
+                print(self.line_release.text())
             for i in range(len(authors)):
                 book = Connect()
                 book.add_book(self.line_name.text(), authors[i], self.line_type.text(), self.line_release.text())
