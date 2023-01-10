@@ -5,11 +5,20 @@ from PyQt5.QtGui import QStandardItem, QStandardItemModel
 
 
 class TableStudent(QTableView):
-    def __init__(self):
+    def __init__(self, squad=None, course=None):
         super().__init__()
         model = QStandardItemModel()
         model.clear()
-        query = QtSql.QSqlQuery("""SELECT fullname, squad, course FROM students""")
+        print(squad, course)
+        if squad is not None and course is not None:
+            query = QtSql.QSqlQuery(f"""SELECT fullname, squad, course FROM students WHERE squad='{squad}' AND course='{course}'""")
+        elif squad is not None:
+            query = QtSql.QSqlQuery(f"""SELECT fullname, squad, course FROM students WHERE squad='{squad}'""")
+        elif course is not None:
+            query = QtSql.QSqlQuery(f"""SELECT fullname, squad, course FROM students WHERE course='{course}'""")
+
+        if squad is None and course is None:
+            query = QtSql.QSqlQuery("""SELECT fullname, squad, course FROM students""")
         model.setColumnCount(3)
         model.setHorizontalHeaderLabels(["ФИО", "Группа", "Курс"])
         proxy = MySortFilterProxyModel()

@@ -4,7 +4,7 @@ import sys
 from interface import Connect
 from PyQt5.QtCore import QAbstractItemModel
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QPushButton, QHBoxLayout, \
-    QVBoxLayout, QDesktopWidget, QLabel, QTableWidget, QLineEdit
+    QVBoxLayout, QDesktopWidget, QLabel, QTableWidget, QLineEdit, QComboBox
 from dialog_student import AddStudent
 from dialog_book import AddBook
 from connector_student import TableStudent
@@ -33,15 +33,20 @@ class Main(QMainWindow):
 
         """Левая сторона окна"""
         # Задаем виджеты
-        search_student = QPushButton("Поиск")
+        # search_student = QPushButton("Поиск")
         add_student = QPushButton("Добавить")
         label_student = QLabel("Студенты:")
+        self.combo_squad = QComboBox()
+        self.combo_course = QComboBox()
+        self.combo_squad.addItems(["Группа", "ПМФ", "БЭК", "ПМ", "АВТ", "ЦТ", "ИТ", "ВТ", "ТМ", "ДП", "ЭП"])
+        self.combo_course.addItems(["Курс", "1", "2", "3", "4"])
 
         # Делаем горизонтальный макет
         h0_box = QHBoxLayout()
         h0_box.addStretch()
         h0_box.addWidget(add_student)
-        h0_box.addWidget(search_student)
+        h0_box.addWidget(self.combo_squad)
+        h0_box.addWidget(self.combo_course)
         h0_box.addStretch()
 
         # Делаем вертикальный макет
@@ -98,8 +103,9 @@ class Main(QMainWindow):
 
         """Добавляем функционал"""
         # Кнопка добавить студента
-        add_student.clicked.connect(self.update_table)
-        search_student.clicked.connect(self.update_table)
+        add_student.clicked.connect(self.add_student)
+        self.combo_squad.currentTextChanged.connect(self.update_table)
+        self.combo_course.currentTextChanged.connect(self.update_table)
         self.table_student.doubleClicked.connect(self.clickedRow)
 
         # Кнопка добавить книгу
@@ -110,9 +116,9 @@ class Main(QMainWindow):
         if column != 0:
             column = 0
         a = Connect()
-        print(a.get_student(self.table_student.model().index(r.row(),column).data(),
-                            self.table_student.model().index(r.row(),column+1).data(),
-                            self.table_student.model().index(r.row(),column+2).data())[0])
+        print(a.get_student(self.table_student.model().index(r.row(), column).data(),
+                            self.table_student.model().index(r.row(), column + 1).data(),
+                            self.table_student.model().index(r.row(), column + 2).data())[0])
 
     def center(self):
         qr = self.frameGeometry()
@@ -120,10 +126,19 @@ class Main(QMainWindow):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-    def update_table(self):
+    def add_student(self):
         AddStudent()
+        self.update_table()
+
+    def update_table(self):
+        print("start: update_table")
+
+        print(self.combo_squad.currentText() == "Группа")
+        print(self.combo_course.currentText() == "Курс")
         self.v0_box.removeWidget(self.table_student)
-        self.table_student = TableStudent()
+        self.table_student = TableStudent(
+            None if self.combo_squad.currentText() == "Группа" else self.combo_squad.currentText(),
+            None if self.combo_course.currentText() == "Курс" else self.combo_course.currentText())
         self.v0_box.insertWidget(2, self.table_student)
         self.table_student.doubleClicked.connect(self.clickedRow)
 

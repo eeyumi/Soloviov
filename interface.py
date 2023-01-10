@@ -11,6 +11,10 @@ class Connect:
                                    f"FROM students "
                                    f"WHERE fullname='{fullname}' AND squad='{squad}' AND course={course}").fetchone()
 
+    def set_book_student(self):
+
+        pass
+
     def add_student(self, numer_grade_book, fullname, squad, course):
         value_line = f"{numer_grade_book}, '{fullname}', '{squad}', {course}"
         self.make_request("students", "numer_grade_book, fullname, squad, course", value_line)
@@ -44,7 +48,7 @@ class Connect:
             print("\t", first_values)
             print("\t", second_values, "\n\n")
 
-            count = self.cursor.execute(f"""
+            self.cursor.execute(f"""
             INSERT
             INTO
             {name_table}({first_values})
