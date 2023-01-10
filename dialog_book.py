@@ -3,11 +3,13 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 from interface import Connect
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit, QComboBox, QMessageBox, QCheckBox
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLineEdit, QMessageBox, QCheckBox
+from style import Style
 
 class AddBook(QDialog):
     def __init__(self):
         super().__init__()
+        self.style = Style()
         self.initUI()
 
     def initUI(self):
@@ -15,26 +17,39 @@ class AddBook(QDialog):
         self.setWindowTitle("Добавить книгу")
         self.setWindowFlag(QtCore.Qt.WindowContextHelpButtonHint, False)
         self.setWindowFlag(QtCore.Qt.MSWindowsFixedSizeDialogHint)
+        self.setStyleSheet(self.style.main_window())
 
         # Задаем виджеты
         label_name = QLabel("Название:\t")
+        label_name.setStyleSheet(self.style.label())
         label_author = QLabel("Автор:\t\t")
+        label_author.setStyleSheet(self.style.label())
         label_type = QLabel("Описание:\t")
+        label_type.setStyleSheet(self.style.label())
         label_release = QLabel("Дата выпуска:\t")
+        label_release.setStyleSheet(self.style.label())
 
         self.line_name = QLineEdit()
+        self.line_name.setStyleSheet(self.style.line_edit1())
         self.line_author = QLineEdit()
+        self.line_author.setStyleSheet(self.style.line_edit1())
         self.line_type = QLineEdit()
+        self.line_type.setStyleSheet(self.style.line_edit1())
         self.line_release = QLineEdit()
+        self.line_release.setStyleSheet(self.style.line_edit1())
 
         self.check_release = QCheckBox("Без даты")
+        self.check_release.setStyleSheet(self.style.check_box())
         self.check_author = QCheckBox("Без автора")
+        self.check_author.setStyleSheet(self.style.check_box())
 
         self.check_release.stateChanged.connect(self._stateChanged_slot_release)
         self.check_author.stateChanged.connect(self._stateChanged_slot_author)
 
         cancellation = QPushButton("Отмена")
+        cancellation.setStyleSheet(self.style.button())
         save = QPushButton("Сохранить")
+        save.setStyleSheet(self.style.button())
 
         # Задаем длину виджета
         self.line_name.setFixedWidth(400)

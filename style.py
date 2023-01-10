@@ -109,8 +109,37 @@ class Style:
             min-width: 10em;
             padding: 6px;
         """
+        style_pressed = """
+            QPushButton:pressed {
+            background-color:  rgb(90, 120, 255)
+            }
+        """
         style_button = "QPushButton" + curly_braces(button)
-        return style_button
+        return style_button+style_pressed
+
+    def line_edit(self):
+        """Стиль поиска"""
+        button = f"""
+            color: rgb{self.color_widget};
+            border-width: 2.5px;
+            border-style: solid;
+            background-color: rgb(255, 255, 255);
+            border-color: rgb{self.color_widget};
+        """
+        style_line_edit = "QLineEdit" + curly_braces(button)
+        return style_line_edit
+
+    def line_edit1(self):
+        """Стиль поиска"""
+        button = f"""
+            color: rgb{self.color_widget};
+            border-width: 1.5px;
+            border-style: solid;
+            background-color: rgb(255, 255, 255);
+            border-color: rgb{self.color_widget};
+        """
+        style_line_edit = "QLineEdit" + curly_braces(button)
+        return style_line_edit
 
     def label(self):
         """Стиль строчек"""

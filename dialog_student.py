@@ -3,6 +3,7 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 from interface import Connect
+from style import Style
 
 
 class AddStudent(QDialog):
@@ -10,6 +11,7 @@ class AddStudent(QDialog):
         super().__init__()
         self.text_group = "ПМФ"
         self.text_course = "1"
+        self.style = Style()
         self.initUI()
 
     def initUI(self):
@@ -17,25 +19,42 @@ class AddStudent(QDialog):
         self.setWindowTitle("Добавить студента")
         self.setWindowFlag(QtCore.Qt.WindowContextHelpButtonHint, False)
         self.setWindowFlag(QtCore.Qt.MSWindowsFixedSizeDialogHint)
+        self.setStyleSheet(self.style.main_window())
 
         # Задаем виджеты
         label_surname = QLabel("Фамилия:\t")
+        label_surname.setStyleSheet(self.style.label())
         label_name = QLabel("Имя:\t\t")
+        label_name.setStyleSheet(self.style.label())
         label_patronymic = QLabel("Отчество:\t")
+        label_patronymic.setStyleSheet(self.style.label())
         label_group = QLabel("Группа:")
+        label_group.setStyleSheet(self.style.label())
         label_course = QLabel("Курс:")
+        label_course.setStyleSheet(self.style.label())
         label_number = QLabel("Номер зачетной книжки:")
+        label_number.setStyleSheet(self.style.label())
 
         self.line_surname = QLineEdit()
+        self.line_surname.setStyleSheet(self.style.line_edit1())
         self.line_name = QLineEdit()
+        self.line_name.setStyleSheet(self.style.line_edit1())
         self.line_patronymic = QLineEdit()
+        self.line_patronymic.setStyleSheet(self.style.line_edit1())
         self.line_number = QLineEdit()
+        self.line_number.setStyleSheet(self.style.line_edit1())
 
         self.list_group = QComboBox()
+        self.list_group.setStyleSheet(self.style.combo_box())
+        self.list_group.setMinimumSize(60, 30)
         self.list_course = QComboBox()
+        self.list_course.setStyleSheet(self.style.combo_box())
+        self.list_course.setMinimumSize(60, 30)
 
         cancellation = QPushButton("Отмена")
+        cancellation.setStyleSheet(self.style.button())
         save = QPushButton("Сохранить")
+        save.setStyleSheet(self.style.button())
 
         # Создаем горизонтальные макеты
         h0_box = QHBoxLayout()

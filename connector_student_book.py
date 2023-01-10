@@ -26,11 +26,13 @@ class TableStudentBook(QTableView):
                                                                     f'FROM books INNER JOIN set_books ON set_books.id_books = books.id_books INNER JOIN records ON records.id_book = set_books.id_BOOK '
                                                                     f'WHERE records.numer_grade_book = {self.numer_grade_book} AND records.return_date IS NULL'):
                     rows = model.rowCount()
-                    model.setRowCount(rows + 1)
+                    # model.setRowCount(rows + 1)
                     model.setItem(rows, 0, QStandardItem(title))
                     model.setItem(rows, 1, QStandardItem(str(id_BOOK)))
-                    model.setItem(rows, 2, QStandardItem(str(date_receipt))) #[:10]
+                    model.setItem(rows, 2, QStandardItem(str(date_receipt)))
+        self.verticalHeader().setVisible(False)
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)

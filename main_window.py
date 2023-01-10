@@ -20,6 +20,7 @@ class Main(QMainWindow):
         super().__init__()
         self.numer_grade_book = None
         self.id_books = None
+        self.current_student = None
         self.style = Style()
         self.initUI()
 
@@ -33,7 +34,8 @@ class Main(QMainWindow):
         self.table_boh = TableStudentBook()
         # Задали окно
         self.setWindowTitle("Библиотека")
-        # self.showFullScreen()
+        self.setStyleSheet(self.style.main_window())
+        self.showFullScreen()
 
         """Левая сторона окна"""
         # Задаем виджеты
@@ -76,15 +78,17 @@ class Main(QMainWindow):
         lable_book = QLabel("Найти по названию книги: ")
         lable_book.setStyleSheet(self.style.label())
         self.line_search_book = QLineEdit()
+        self.line_search_book.setStyleSheet(self.style.line_edit())
         label_library = QLabel("Библиотека:")
-        self.label_books_hand = QLabel("Книги на руках:")  # boh - books on hand (книги на руках) P.s Да-да, с соображалкой у меня туго)))
-        get_all_book = QPushButton("Забрать все")
-        get_book = QPushButton("Забрать")
-        give_book = QPushButton("Выдать")
+        label_library.setStyleSheet(self.style.label())
+        self.label_books_hand = QLabel("Книги на руках:")# boh - books on hand (книги на руках) P.s Да-да, с соображалкой у меня туго)))
+        self.label_books_hand.setStyleSheet(self.style.label())
         exit = QPushButton("Выход")
+        exit.setStyleSheet(self.style.button())
         self.line_id_book = QLineEdit()
+        self.line_id_book.setStyleSheet(self.style.line_edit())
         label_id_book = QLabel("Укажите код книги: ")
-        self.current_student = None
+        label_id_book.setStyleSheet(self.style.label())
 
         # Задаем ввод для зачетки
         reg_number = QRegExp("[0-9]{6,6}")
@@ -101,14 +105,8 @@ class Main(QMainWindow):
         h1_box.addStretch()
         h1_box.addWidget(exit)
 
-        h2_box = QHBoxLayout()
-        h2_box.addWidget(get_all_book)
-        h2_box.addWidget(get_book)
-        h2_box.addWidget(give_book)
-
         h4_box = QHBoxLayout()
         h4_box.addWidget(self.label_books_hand, 2)
-        # h4_box.addStretch()
         h4_box.addWidget(label_id_book)
         h4_box.addWidget(self.line_id_book)
 
@@ -118,7 +116,6 @@ class Main(QMainWindow):
         self.v1_box.addWidget(label_library)
         self.v1_box.addWidget(self.table_book)
         self.v1_box.addLayout(h4_box)
-        self.v1_box.addLayout(h2_box)
         self.v1_box.addWidget(self.table_boh)
 
         """Соединяем левую и правую часть"""
