@@ -30,13 +30,13 @@ class Main(QMainWindow):
         self.table_boh = TableStudentBook()
         # Задали окно
         self.setWindowTitle("Библиотека")
-        #self.showFullScreen()
-
+        # self.showFullScreen()
 
         """Левая сторона окна"""
         # Задаем виджеты
         # search_student = QPushButton("Поиск")
         add_student = QPushButton("Добавить студента")
+        self.del_student = QPushButton("Удалить студента")
         label_student = QLabel("Студенты:")
         self.combo_squad = QComboBox()
         self.combo_course = QComboBox()
@@ -47,6 +47,7 @@ class Main(QMainWindow):
         h0_box = QHBoxLayout()
         h0_box.addStretch()
         h0_box.addWidget(add_student)
+        h0_box.addWidget(self.del_student)
         h0_box.addWidget(self.combo_squad)
         h0_box.addWidget(self.combo_course)
         h0_box.addStretch()
@@ -104,7 +105,8 @@ class Main(QMainWindow):
         self.setCentralWidget(widget)
 
         """Добавляем функционал"""
-        add_student.clicked.connect(self.update_table_student)
+        add_student.clicked.connect(self.update_add_table_student)
+
         add_book.clicked.connect(self.update_table_book)
         exit.clicked.connect(qApp.quit)
         self.combo_squad.currentTextChanged.connect(self.update_table)
@@ -133,15 +135,22 @@ class Main(QMainWindow):
         if column != 0:
             column = 0
         a = Connect()
-        numer_grade_book = (a.get_student(self.table_student.model().index(r.row(), column).data(),
-                                    self.table_student.model().index(r.row(), column + 1).data(),
-                                    self.table_student.model().index(r.row(), column + 2).data())[0])
+        self.numer_grade_book = (a.get_student(self.table_student.model().index(r.row(), column).data(),
+                                          self.table_student.model().index(r.row(), column + 1).data(),
+                                          self.table_student.model().index(r.row(), column + 2).data())[0])
+        print(self.numer_grade_book)
+        self.del_student.clicked.connect(self.update_del_table_student)
         self.v1_box.removeWidget(self.table_boh)
-        self.table_boh = TableStudentBook(numer_grade_book)
+        self.table_boh = TableStudentBook(self.numer_grade_book)
         self.v1_box.insertWidget(5, self.table_boh)
 
-    def update_table_student(self):
+    def update_add_table_student(self):
         AddStudent()
+        self.update_table()
+
+    def update_del_table_student(self):
+        student = Connect()
+        student.delete_student(self.numer_grade_book)
         self.update_table()
 
     def update_table(self):

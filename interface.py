@@ -18,7 +18,7 @@ class Connect:
                         return "У студента на руках есть книги!\nДля уделаения студента их быть не должно!!!"
             if record is not None:
                 for i in record:
-                    print(record[1])
+                    print(i[1])
                     self.cursor.execute(f"DELETE FROM records WHERE numer_grade_book={numer_grade_book}")
                     print("Книга изъята")
             self.cursor.execute(f"DELETE FROM students WHERE numer_grade_book={numer_grade_book}")
@@ -102,5 +102,5 @@ class Connect:
 if __name__ == '__main__':
     a = Connect()
     # print(a.set_book_student("Курс математического анализа. Том 1", "2020", "Математический анализ")[0])
-    print(a.delete_book(3))
+    print(a.delete_student(2926293))
     a.close()
