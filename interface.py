@@ -11,9 +11,10 @@ class Connect:
                                    f"FROM students "
                                    f"WHERE fullname='{fullname}' AND squad='{squad}' AND course={course}").fetchone()
 
-    def set_book_student(self):
-
-        pass
+    def set_book_student(self, title, release, type_book):
+        return self.cursor.execute(f"SELECT id_books "
+                                   f"FROM books "
+                                   f"WHERE title='{title}' AND release={release} AND type_book='{type_book}'").fetchone()
 
     def add_student(self, numer_grade_book, fullname, squad, course):
         value_line = f"{numer_grade_book}, '{fullname}', '{squad}', {course}"
@@ -68,5 +69,5 @@ class Connect:
 
 if __name__ == '__main__':
     a = Connect()
-    print(a.get_student("Цветков Фёдор Фёдорович", "ИТ", 1)[0])
+    print(a.set_book_student("Курс математического анализа. Том 1", "2020", "Математический анализ")[0])
     a.close()
