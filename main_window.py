@@ -105,6 +105,8 @@ class Main(QMainWindow):
 
         """Добавляем функционал"""
         add_student.clicked.connect(self.update_table_student)
+        self.combo_squad.currentTextChanged.connect(self.update_table)
+        self.combo_course.currentTextChanged.connect(self.update_table)
         self.table_student.doubleClicked.connect(self.clicked_row_student)
         self.table_book.doubleClicked.connect(self.clicked_row_book)
         add_book.clicked.connect(self.update_table_book)
@@ -123,7 +125,7 @@ class Main(QMainWindow):
         if column != 0:
             column = 0
         a = Connect()
-        print(a.get_student(self.table_book.model().index(r.row(), column).data(),
+        print(a.set_book_student(self.table_book.model().index(r.row(), column).data(),
                             self.table_book.model().index(r.row(), column + 1).data(),
                             self.table_book.model().index(r.row(), column + 2).data())[0])
     def clicked_row_student(self, r):
