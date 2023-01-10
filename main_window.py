@@ -34,7 +34,7 @@ class Main(QMainWindow):
         """Левая сторона окна"""
         # Задаем виджеты
         # search_student = QPushButton("Поиск")
-        add_student = QPushButton("Добавить")
+        add_student = QPushButton("Добавить студента")
         label_student = QLabel("Студенты:")
         self.combo_squad = QComboBox()
         self.combo_course = QComboBox()
@@ -57,7 +57,7 @@ class Main(QMainWindow):
 
         """Правая сторона окна"""
         # Задаем виджеты
-        add_book = QPushButton("Добавить")
+        add_book = QPushButton("Добавить книгу")
         lable_book = QLabel("Найти по названию книги: ")
         line_search_book = QLineEdit()
         # line_search_book.stateChanged.connect(self._stateChanged_slot_release)
