@@ -160,7 +160,7 @@ col = {"0": "A", "1": "B", "2": "C"}
 
 
 try:
-    for i in range(2, 103):
+    for i in range(2, 148):
         sqlite_connection = sqlite3.connect('LIBRARY.db')
         cursor = sqlite_connection.cursor()
 
@@ -172,9 +172,18 @@ try:
         result += f"'{a}'" + ","
         a = str(sheet_ranges["D" + f"{i}"].value)
         # print(type(a))
-        result += f"'{a}'" + ","
-        a = str(sheet_ranges["E" + f"{i}"].value)
         result += f"'{a}'"
+        a = sheet_ranges["E" + f"{i}"].value
+        # print(type(a))
+        if a is not None:
+            line = ", return_date"
+            result += "," + f"'{a}'"
+        else:
+            line = ""
+            # result += f"{a}"
+
+
+        # s = str(a)
         # for j in range(1, 3):
         #     # sheet_ranges[get_column_num(column, i)].value)
         #
@@ -182,7 +191,7 @@ try:
         cursor.execute(f"""
                     INSERT
                     INTO
-                    records(numer_grade_book, id_book, date_receipt, return_date)
+                    records(numer_grade_book, id_book, date_receipt{line})
                     VALUES({result});
                     """)
         sqlite_connection.commit()

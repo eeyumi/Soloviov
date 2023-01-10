@@ -9,6 +9,7 @@ from dialog_student import AddStudent
 from dialog_book import AddBook
 from connector_student import TableStudent
 from connector_book import TableBook
+from connector_student_book import TableStudentBook
 from search_book import SearchBook
 from interface import Connect
 
@@ -69,7 +70,7 @@ class Main(QMainWindow):
         get_all_book = QPushButton("Забрать все")
         get_book = QPushButton("Забрать")
         give_book = QPushButton("Выдать")
-        table_boh = QTableWidget()
+        self.table_boh = TableStudentBook()
 
         # Делаем горизонтальные макеты
         h1_box = QHBoxLayout()
@@ -91,7 +92,7 @@ class Main(QMainWindow):
         self.v1_box.addWidget(self.table_book)
         self.v1_box.addWidget(label_boh)
         self.v1_box.addLayout(h2_box)
-        self.v1_box.addWidget(table_boh)
+        self.v1_box.addWidget(self.table_boh)
 
         """Соединяем левую и правую часть"""
         h3_box = QHBoxLayout()
@@ -118,16 +119,15 @@ class Main(QMainWindow):
         self.v1_box.insertWidget(2, self.table_book)
         self.table_book.doubleClicked.connect(self.clicked_row_book)
 
-
-
     def clicked_row_book(self, r):
         column = r.column()
         if column != 0:
             column = 0
         a = Connect()
         print(a.set_book_student(self.table_book.model().index(r.row(), column).data(),
-                            self.table_book.model().index(r.row(), column + 1).data(),
-                            self.table_book.model().index(r.row(), column + 2).data())[0])
+                                 self.table_book.model().index(r.row(), column + 1).data(),
+                                 self.table_book.model().index(r.row(), column + 2).data())[0])
+
     def clicked_row_student(self, r):
         column = r.column()
         if column != 0:
@@ -148,10 +148,6 @@ class Main(QMainWindow):
         self.update_table()
 
     def update_table(self):
-        print("start: update_table")
-
-        print(self.combo_squad.currentText() == "Группа")
-        print(self.combo_course.currentText() == "Курс")
         self.v0_box.removeWidget(self.table_student)
         self.table_student = TableStudent(
             None if self.combo_squad.currentText() == "Группа" else self.combo_squad.currentText(),
@@ -159,12 +155,19 @@ class Main(QMainWindow):
         self.v0_box.insertWidget(2, self.table_student)
         self.table_student.doubleClicked.connect(self.clicked_row_student)
 
+    def update_table_book_student(self):
+        self.v1_box.removeWidget(self.table_boh)
+        self.table_boh = TableStudentBook()
+        self.v1_box.insertWidget(2, self.table_boh)
+        self.table_boh.doubleClicked.connect(self.clicked_row_student)
+
     def update_table_book(self):
         AddBook()
         self.v1_box.removeWidget(self.table_book)
         self.table_book = TableBook()
         self.v1_box.insertWidget(2, self.table_book)
         self.table_book.doubleClicked.connect(self.clicked_row_book)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
