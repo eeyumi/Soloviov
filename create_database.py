@@ -17,7 +17,7 @@ sqlite_connection.commit()
 
 cursor.execute(
 """ CREATE TABLE IF NOT EXISTS set_books(
-id_BOOK INTEGER PRIMARY KEY,
+id_BOOK INTEGER PRIMARY KEY AUTOINCREMENT,
 id_books INTEGER,
 FOREIGN KEY (id_books)  REFERENCES books (id_books) ON DELETE CASCADE);
 """

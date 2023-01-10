@@ -97,7 +97,14 @@ class Connect:
 
     def add_record(self, numer_grade_book, id_book):
         self.make_request_insert("records", "numer_grade_book, id_book, date_receipt",
-                          f"{numer_grade_book}, {id_book}, date('now')")
+                                 f"{numer_grade_book}, {id_book}, date('now')")
+
+    def add_itam_book(self, count, title, release):
+        id_books = self.cursor.execute(f"SELECT id_books "
+                                       f"FROM books "
+                                       f"WHERE title='{title}' AND release={release}").fetchone()[0]
+        for i in range(int(count)):
+            self.make_request_insert("set_books", "id_books", f"{id_books}")
 
     def add_book(self, title, after, type_book, release):
         value_line = f"'{title}',{release} , '{type_book}'"
@@ -120,7 +127,6 @@ class Connect:
                                    ).fetchone()
         if info is None:
             self.make_request_insert("books_authors", "id_books, id_author", f"{id_books[0]}, {id_author[0]}")
-
 
     def make_request_insert(self, name_table, first_values, second_values):
         try:
@@ -148,5 +154,5 @@ class Connect:
 if __name__ == '__main__':
     a = Connect()
     print(a.get_record_free(114452))
-    a.add_record("1111111", "114452")
+    a.add_itam_book(100, "Курс математического анализа. Том 2", "2019")
     a.close()

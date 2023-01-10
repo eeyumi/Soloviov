@@ -29,6 +29,8 @@ class AddBook(QDialog):
         label_type.setStyleSheet(self.style.label())
         label_release = QLabel("Дата выпуска:\t")
         label_release.setStyleSheet(self.style.label())
+        label_count = QLabel("Кол-во экземпляров:\t")
+        label_count.setStyleSheet(self.style.label())
 
         self.line_name = QLineEdit()
         self.line_name.setStyleSheet(self.style.line_edit1())
@@ -38,6 +40,8 @@ class AddBook(QDialog):
         self.line_type.setStyleSheet(self.style.line_edit1())
         self.line_release = QLineEdit()
         self.line_release.setStyleSheet(self.style.line_edit1())
+        self.line_count = QLineEdit()
+        self.line_count.setStyleSheet(self.style.line_edit1())
 
         self.check_release = QCheckBox("Без даты")
         self.check_release.setStyleSheet(self.style.check_box())
@@ -77,15 +81,22 @@ class AddBook(QDialog):
         validator_number = QRegExpValidator(reg_number)
         self.line_release.setValidator(validator_number)
 
+        reg_count = QRegExp("[0-9]*")
+        validator_number = QRegExpValidator(reg_count)
+        self.line_count.setValidator(validator_number)
+
         h3_box = QHBoxLayout()
         h3_box.addWidget(label_release)
         h3_box.addWidget(self.line_release)
         h3_box.addWidget(self.check_release)
 
-
         h4_box = QHBoxLayout()
-        h4_box.addWidget(cancellation)
-        h4_box.addWidget(save)
+        h4_box.addWidget(label_count)
+        h4_box.addWidget(self.line_count)
+
+        h5_box = QHBoxLayout()
+        h5_box.addWidget(cancellation)
+        h5_box.addWidget(save)
 
         # Создаем вертикальный макет
         v_box = QVBoxLayout(self)
@@ -94,6 +105,7 @@ class AddBook(QDialog):
         v_box.addLayout(h2_box)
         v_box.addLayout(h3_box)
         v_box.addLayout(h4_box)
+        v_box.addLayout(h5_box)
 
         # Добавляем функционал
         cancellation.clicked.connect(self.accept)
@@ -123,11 +135,14 @@ class AddBook(QDialog):
         if self.line_author.text() == "" and not self.check_author.isChecked():
             list_error.append("Вы не указали автора!\n")
             bool_error = True
-        if self.line_type.text() == ""  :
+        if self.line_type.text() == "":
             list_error.append("Вы не указали короткое описание (два-три слова)!\n")
             bool_error = True
         if self.line_release.text() == "" and not self.check_release.isChecked():
             list_error.append("Вы не указали год выпуска!\n")
+            bool_error = True
+        if self.line_count.text() == "":
+            list_error.append("Вы не указали кол-во экземпляров!\n")
             bool_error = True
         if bool_error:
             msg = QMessageBox()
@@ -147,4 +162,5 @@ class AddBook(QDialog):
             for i in range(len(authors)):
                 book = Connect()
                 book.add_book(self.line_name.text(), authors[i], self.line_type.text(), self.line_release.text())
+                book.add_itam_book(self.line_count.text(), self.line_name.text(), self.line_release.text())
                 self.accept()
