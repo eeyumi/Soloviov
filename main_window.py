@@ -2,7 +2,7 @@
 from PyQt5 import QtSql
 import sys
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QPushButton, QHBoxLayout, \
-    QVBoxLayout, QLabel, QLineEdit, QComboBox, qApp
+    QVBoxLayout, QLabel, QLineEdit, QComboBox, qApp, QMessageBox
 from dialog_student import AddStudent
 from dialog_book import AddBook
 from connector_student import TableStudent
@@ -61,6 +61,7 @@ class Main(QMainWindow):
         """Правая сторона окна"""
         # Задаем виджеты
         add_book = QPushButton("Добавить книгу")
+        self.del_book = QPushButton("Удалить книгу")
         lable_book = QLabel("Найти по названию книги: ")
         self.line_search_book = QLineEdit()
         label_library = QLabel("Библиотека:")
@@ -75,6 +76,7 @@ class Main(QMainWindow):
         h1_box = QHBoxLayout()
         h1_box.addStretch()
         h1_box.addWidget(add_book)
+        h1_box.addWidget(self.del_book)
         h1_box.addWidget(lable_book)
         h1_box.addWidget(self.line_search_book)
         h1_box.addStretch()
@@ -106,14 +108,17 @@ class Main(QMainWindow):
 
         """Добавляем функционал"""
         add_student.clicked.connect(self.update_add_table_student)
-
-        add_book.clicked.connect(self.update_table_book)
+        # self.del_book.clicked.connect(self.update_del_table_book)
+        add_book.clicked.connect(self.update_add_table_book)
+        add_book.clicked.connect(self.update_add_table_book)
         exit.clicked.connect(qApp.quit)
         self.combo_squad.currentTextChanged.connect(self.update_table)
         self.combo_course.currentTextChanged.connect(self.update_table)
         self.table_student.doubleClicked.connect(self.clicked_row_student)
         self.table_book.doubleClicked.connect(self.clicked_row_book)
         self.line_search_book.textEdited.connect(self.search_book)
+        self.del_student.clicked.connect(lambda: self.update_del_table_student(self.numer_grade_book))
+        self.del_book.clicked.connect(self.update_del_table_book)
 
     def search_book(self):
         self.v1_box.removeWidget(self.table_book)
@@ -126,9 +131,10 @@ class Main(QMainWindow):
         if column != 0:
             column = 0
         a = Connect()
-        print(a.set_book_student(self.table_book.model().index(r.row(), column).data(),
-                                 self.table_book.model().index(r.row(), column + 1).data(),
-                                 self.table_book.model().index(r.row(), column + 2).data())[0])
+        self.id_books = a.set_book_student(self.table_book.model().index(r.row(), column).data(),
+                                      self.table_book.model().index(r.row(), column + 1).data(),
+                                      self.table_book.model().index(r.row(), column + 2).data())[0]
+
 
     def clicked_row_student(self, r):
         column = r.column()
@@ -136,10 +142,10 @@ class Main(QMainWindow):
             column = 0
         a = Connect()
         self.numer_grade_book = (a.get_student(self.table_student.model().index(r.row(), column).data(),
-                                          self.table_student.model().index(r.row(), column + 1).data(),
-                                          self.table_student.model().index(r.row(), column + 2).data())[0])
+                                               self.table_student.model().index(r.row(), column + 1).data(),
+                                               self.table_student.model().index(r.row(), column + 2).data())[0])
         print(self.numer_grade_book)
-        self.del_student.clicked.connect(self.update_del_table_student)
+
         self.v1_box.removeWidget(self.table_boh)
         self.table_boh = TableStudentBook(self.numer_grade_book)
         self.v1_box.insertWidget(5, self.table_boh)
@@ -148,10 +154,18 @@ class Main(QMainWindow):
         AddStudent()
         self.update_table()
 
-    def update_del_table_student(self):
+    def update_del_table_student(self, numer_grade_book):
         student = Connect()
-        student.delete_student(self.numer_grade_book)
-        self.update_table()
+        result_del = student.delete_student(numer_grade_book)
+        print(result_del)
+        if result_del:
+            self.update_table()
+        else:
+            msg = QMessageBox()
+            msg.setWindowTitle("Внимание!")
+            msg.setText("У студента на руках есть книги!\nДля уделаения студента их быть не должно!!!")
+            msg.setIcon(QMessageBox.Warning)
+            msg.exec_()
 
     def update_table(self):
         self.v0_box.removeWidget(self.table_student)
@@ -167,8 +181,17 @@ class Main(QMainWindow):
         self.v1_box.insertWidget(2, self.table_boh)
         self.table_boh.doubleClicked.connect(self.clicked_row_student)
 
-    def update_table_book(self):
+    def update_add_table_book(self):
         AddBook()
+        self.v1_box.removeWidget(self.table_book)
+        self.table_book = TableBook()
+        self.v1_box.insertWidget(2, self.table_book)
+        self.table_book.doubleClicked.connect(self.clicked_row_book)
+
+    def update_del_table_book(self):
+        student = Connect()
+        result_del = student.delete_book(self.id_books)
+        print(result_del)
         self.v1_box.removeWidget(self.table_book)
         self.table_book = TableBook()
         self.v1_box.insertWidget(2, self.table_book)

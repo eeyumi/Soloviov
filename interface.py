@@ -15,7 +15,7 @@ class Connect:
             if len(record):
                 for i in record:
                     if i[1] is None:
-                        return "У студента на руках есть книги!\nДля уделаения студента их быть не должно!!!"
+                        return False
             if record is not None:
                 for i in record:
                     print(i[1])
@@ -23,7 +23,7 @@ class Connect:
                     print("Книга изъята")
             self.cursor.execute(f"DELETE FROM students WHERE numer_grade_book={numer_grade_book}")
             self.sqlite_connection.commit()
-            return"Запись успешно удалена"
+            return True
         except sqlite3.Error as error:
             print("Ошибка при удалении записи с SQLite:", error, "!!!!!!")
 
@@ -102,5 +102,5 @@ class Connect:
 if __name__ == '__main__':
     a = Connect()
     # print(a.set_book_student("Курс математического анализа. Том 1", "2020", "Математический анализ")[0])
-    print(a.delete_student(2926293))
+    print(a.delete_book(14))
     a.close()
