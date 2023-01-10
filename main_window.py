@@ -185,8 +185,11 @@ class Main(QMainWindow):
                         MessageBox("Данная книга занята!!!")
                 else:
                     MessageBox("К этой книге не относится этот экземпляр!!!")
-            else:
+            elif len(code_book) == 0:
                 MessageBox("Укажите код книги, которую вы хотите дать студенту!!!")
+            else:
+                MessageBox("Код книги должен иметь 6 цифр!!!")
+
         else:
             MessageBox("Укажите студента, которому хотите дать книгу!")
 
