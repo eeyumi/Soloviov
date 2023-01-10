@@ -30,6 +30,7 @@ class TableBook(QTableView):
 class MySortFilterProxyModel(QSortFilterProxyModel):
     def lessThan(self, source_left, source_right):
         if (source_left.isValid() and source_right.isValid()):
-            if (source_left.column() == 1):  # <== номер колонки с числами
-                return int(source_left.data()) < int(source_right.data())
+            if (source_left.column() == 2):
+                source_left.data()
+                return int(source_left.data()[:1]) < int(source_right.data()[:1])
         return super(MySortFilterProxyModel, self).lessThan(source_left, source_right)

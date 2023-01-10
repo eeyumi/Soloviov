@@ -11,7 +11,7 @@ class SearchBook(QTableView):
         model = QStandardItemModel()
         query = QSqlQuery()
         query.exec(f""" SELECT title, release, type_book FROM books
-             WHERE title LIKE ('%{title}%')""")
+             WHERE (title) LIKE ('%{title}%') COLLATE NOCASE""")
 
         model.setColumnCount(3)
         model.setHorizontalHeaderLabels(["Название книги", "Дата выпуска", "Тип книги"])

@@ -2,7 +2,7 @@
 from PyQt5 import QtSql
 import sys
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QPushButton, QHBoxLayout, \
-    QVBoxLayout, QDesktopWidget, QLabel, QLineEdit, QComboBox
+    QVBoxLayout, QLabel, QLineEdit, QComboBox, qApp
 from dialog_student import AddStudent
 from dialog_book import AddBook
 from connector_student import TableStudent
@@ -30,8 +30,8 @@ class Main(QMainWindow):
         self.table_boh = TableStudentBook()
         # Задали окно
         self.setWindowTitle("Библиотека")
-        self.setMinimumSize(1400, 850)
-        self.center()
+        #self.showFullScreen()
+
 
         """Левая сторона окна"""
         # Задаем виджеты
@@ -68,6 +68,7 @@ class Main(QMainWindow):
         get_all_book = QPushButton("Забрать все")
         get_book = QPushButton("Забрать")
         give_book = QPushButton("Выдать")
+        exit = QPushButton("Выход")
 
         # Делаем горизонтальные макеты
         h1_box = QHBoxLayout()
@@ -76,6 +77,7 @@ class Main(QMainWindow):
         h1_box.addWidget(lable_book)
         h1_box.addWidget(self.line_search_book)
         h1_box.addStretch()
+        h1_box.addWidget(exit)
 
         h2_box = QHBoxLayout()
         h2_box.addWidget(get_all_book)
@@ -103,11 +105,12 @@ class Main(QMainWindow):
 
         """Добавляем функционал"""
         add_student.clicked.connect(self.update_table_student)
+        add_book.clicked.connect(self.update_table_book)
+        exit.clicked.connect(qApp.quit)
         self.combo_squad.currentTextChanged.connect(self.update_table)
         self.combo_course.currentTextChanged.connect(self.update_table)
         self.table_student.doubleClicked.connect(self.clicked_row_student)
         self.table_book.doubleClicked.connect(self.clicked_row_book)
-        add_book.clicked.connect(self.update_table_book)
         self.line_search_book.textEdited.connect(self.search_book)
 
     def search_book(self):
@@ -136,12 +139,6 @@ class Main(QMainWindow):
         self.v1_box.removeWidget(self.table_boh)
         self.table_boh = TableStudentBook(numer_grade_book)
         self.v1_box.insertWidget(5, self.table_boh)
-
-    def center(self):
-        qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
 
     def update_table_student(self):
         AddStudent()

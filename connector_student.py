@@ -1,5 +1,5 @@
 from PyQt5 import QtSql
-from PyQt5.QtWidgets import QTableView, QAbstractItemView
+from PyQt5.QtWidgets import QTableView, QAbstractItemView, QHeaderView
 from PyQt5.QtCore import QSortFilterProxyModel
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 
@@ -31,7 +31,8 @@ class TableStudent(QTableView):
             model.setItem(rows, 0, QStandardItem(query.value(0)))
             model.setItem(rows, 1, QStandardItem(query.value(1)))
             model.setItem(rows, 2, QStandardItem(str(query.value(2))))
-        self.resizeColumnsToContents()
+        self.setFixedWidth(800)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
