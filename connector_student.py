@@ -1,6 +1,6 @@
 from PyQt5 import QtSql
 from PyQt5.QtWidgets import QTableView, QAbstractItemView
-from PyQt5.QtCore import QSortFilterProxyModel, Qt
+from PyQt5.QtCore import QSortFilterProxyModel
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 
 

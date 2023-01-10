@@ -97,13 +97,16 @@ class Main(QMainWindow):
         # Кнопка добавить студента
         add_student.clicked.connect(self.update_table)
         search_student.clicked.connect(self.update_table)
-        self.table_student.doubleClicked.connect(self.clickedRowColumn)
+        self.table_student.doubleClicked.connect(self.clickedRow)
 
         # Кнопка добавить книгу
         add_book.clicked.connect(AddBook)
 
-    def clickedRowColumn(self, r):
-        print(r)
+    def clickedRow(self, r):
+        column = r.column()
+        if column != 0:
+            column = 0
+        print(self.table_student.model().index(r.row(),column).data()+" "+self.table_student.model().index(r.row(),column+1).data()+" "+self.table_student.model().index(r.row(),column+2).data())
     def center(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
@@ -115,6 +118,7 @@ class Main(QMainWindow):
         self.v0_box.removeWidget(self.table_student)
         self.table_student = TableStudent()
         self.v0_box.insertWidget(2, self.table_student)
+        self.table_student.doubleClicked.connect(self.clickedRow)
 
 
 if __name__ == '__main__':
