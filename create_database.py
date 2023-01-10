@@ -24,14 +24,6 @@ FOREIGN KEY (id_books)  REFERENCES books (id_books) ON DELETE CASCADE);
 )
 sqlite_connection.commit()
 
-# cursor.execute(
-# """CREATE TABLE IF NOT EXiSTS type_book(
-# id_type INTEGER PRIMARY KEY AUTOINCREMENT,
-# title  UNIQUE);
-# """
-# )
-# sqlite_connection.commit()
-
 cursor.execute(
 """ CREATE TABLE IF NOT EXISTS authors(
 id_author INTEGER PRIMARY KEY AUTOINCREMENT,

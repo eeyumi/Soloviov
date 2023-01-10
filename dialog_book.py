@@ -141,10 +141,8 @@ class AddBook(QDialog):
                 print(authors)
             else:
                 authors = self.line_author.text().replace(', ', ',').replace(' ,', ',').split(',')
-            # print(len(authors))
             if self.check_release.isChecked():
                 self.line_release.setText("0000")
-                print(self.line_release.text())
             for i in range(len(authors)):
                 book = Connect()
                 book.add_book(self.line_name.text(), authors[i], self.line_type.text(), self.line_release.text())

@@ -26,7 +26,6 @@ class TableStudentBook(QTableView):
                                                                     f'FROM books INNER JOIN set_books ON set_books.id_books = books.id_books INNER JOIN records ON records.id_book = set_books.id_BOOK '
                                                                     f'WHERE records.numer_grade_book = {self.numer_grade_book}'):
                     rows = model.rowCount()
-                    # model.setRowCount(rows + 1)
                     model.setItem(rows, 0, QStandardItem(title))
                     model.setItem(rows, 1, QStandardItem(str(id_BOOK)))
                     model.setItem(rows, 2, QStandardItem(str(date_receipt)))
@@ -39,6 +38,8 @@ class TableStudentBook(QTableView):
 
     def delete(self):
         self.model().removeRows(0, self.model().rowCount())
+
+
 class MySortFilterProxyModel(QSortFilterProxyModel):
     def lessThan(self, source_left, source_right):
         return super(MySortFilterProxyModel, self).lessThan(source_left, source_right)

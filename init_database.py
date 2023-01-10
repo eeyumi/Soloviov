@@ -18,10 +18,6 @@ try:
         result += f"'{a}'" + ","
         a = sheet_ranges["C" + f"{i}"].value
         result += f"'{a}'" + ","
-        # for j in range(1, 3):
-        #     # sheet_ranges[get_column_num(column, i)].value)
-        #
-        #     result += f"{a}" + ','
         result += '1'
         cursor.execute(f"""
                     INSERT
@@ -30,7 +26,6 @@ try:
                     VALUES({result});
                     """)
         sqlite_connection.commit()
-        # print("Запись успешно вставлена", cursor.rowcount)
         cursor.close()
 except sqlite3.Error as error:
     print("students Ошибка при работе с SQLite", error)
@@ -55,10 +50,6 @@ try:
         result = f"'{a}'" + ","
         a = sheet_ranges["B" + f"{i}"].value
         result += f"'{a}'"
-        # for j in range(1, 3):
-        #     # sheet_ranges[get_column_num(column, i)].value)
-        #
-        #     result += f"{a}" + ','
         cursor.execute(f"""
                     INSERT
                     INTO
@@ -66,7 +57,6 @@ try:
                     VALUES({result});
                     """)
         sqlite_connection.commit()
-        # print("Запись успешно вставлена", cursor.rowcount)
         cursor.close()
 except sqlite3.Error as error:
     print("authors Ошибка при работе с SQLite", error)
@@ -93,10 +83,6 @@ try:
         result += f"'{a}'" + ","
         a = sheet_ranges["D" + f"{i}"].value
         result += f"'{a}'"
-        # for j in range(1, 3):
-        #     # sheet_ranges[get_column_num(column, i)].value)
-        #
-        #     result += f"{a}" + ','
         cursor.execute(f"""
                     INSERT
                     INTO
@@ -104,7 +90,6 @@ try:
                     VALUES({result});
                     """)
         sqlite_connection.commit()
-        # print("Запись успешно вставлена", cursor.rowcount)
         cursor.close()
 except sqlite3.Error as error:
     print("books Ошибка при работе с SQLite", error)
@@ -130,10 +115,6 @@ try:
         result = f"{a}" + ","
         a = sheet_ranges["A" + f"{i}"].value
         result += f"{a}"
-        # for j in range(1, 3):
-        #     # sheet_ranges[get_column_num(column, i)].value)
-        #
-        #     result += f"{a}" + ','
         cursor.execute(f"""
                     INSERT
                     INTO
@@ -142,8 +123,6 @@ try:
                     """)
         sqlite_connection.commit()
         cursor.close()
-
-        # print("Запись успешно вставлена", cursor.rowcount)
 except sqlite3.Error as error:
     print("set_books Ошибка при работе с SQLite", error)
 
@@ -164,23 +143,12 @@ try:
         sqlite_connection = sqlite3.connect('LIBRARY.db')
         cursor = sqlite_connection.cursor()
 
-        # a = sheet_ranges["A" + f"{i}"].value
-        # result = f"{a}" + ","
         a = sheet_ranges["B" + f"{i}"].value
         result = f"'{a}'" + ","
         a = sheet_ranges["C" + f"{i}"].value
         result += f"'{a}'" + ","
         a = str(sheet_ranges["D" + f"{i}"].value)
-        # print(type(a))
         result += f"'{a}'"
-            # result += f"{a}"
-
-
-        # s = str(a)
-        # for j in range(1, 3):
-        #     # sheet_ranges[get_column_num(column, i)].value)
-        #
-        #     result += f"{a}" + ','
         cursor.execute(f"""
                     INSERT
                     INTO
@@ -189,8 +157,6 @@ try:
                     """)
         sqlite_connection.commit()
         cursor.close()
-
-        # print("Запись успешно вставлена", cursor.rowcount)
 except sqlite3.Error as error:
     print("records Ошибка при работе с SQLite", error)
 
@@ -199,44 +165,6 @@ finally:
         sqlite_connection.close()
         print("Соединение с SQLite закрыто")
 
-
-#===============================================
-#
-# xl = lw("datadases/Tip_Knigi.xlsx")
-# sheet_ranges = xl['Sheet1']
-# col = {"0": "A", "1": "B", "2": "C"}
-#
-#
-# try:
-#     for i in range(2, 18):
-#         sqlite_connection = sqlite3.connect('LIBRARY.db')
-#         cursor = sqlite_connection.cursor()
-#
-#         # a = sheet_ranges["A" + f"{i}"].value
-#         # result = f"{a}" + ","
-#         a = sheet_ranges["B" + f"{i}"].value
-#         result = f"'{a}'"
-#         # for j in range(1, 3):
-#         #     # sheet_ranges[get_column_num(column, i)].value)
-#         #
-#         #     result += f"{a}" + ','
-#         cursor.execute(f"""
-#                     INSERT
-#                     INTO
-#                     type_book(title)
-#                     VALUES({result});
-#                     """)
-#         sqlite_connection.commit()
-#         cursor.close()
-#
-#         print("Запись успешно вставлена", cursor.rowcount)
-# except sqlite3.Error as error:
-#     print("Ошибка при работе с SQLite", error)
-#
-# finally:
-#     if sqlite_connection:
-#         sqlite_connection.close()
-#         print("Соединение с SQLite закрыто")
 
 #===============================================
 
@@ -249,15 +177,10 @@ try:
     for i in range(2, 65):
         sqlite_connection = sqlite3.connect('LIBRARY.db')
         cursor = sqlite_connection.cursor()
-
         a = sheet_ranges["A" + f"{i}"].value
         result = f"{a}" + ","
         a = sheet_ranges["B" + f"{i}"].value
         result += f"'{a}'"
-        # for j in range(1, 3):
-        #     # sheet_ranges[get_column_num(column, i)].value)
-        #
-        #     result += f"{a}" + ','
         cursor.execute(f"""
                     INSERT
                     INTO

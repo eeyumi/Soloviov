@@ -73,23 +73,23 @@ class Main(QMainWindow):
         """Правая сторона окна"""
         # Задаем виджеты
         add_book = QPushButton("Добавить книгу")
-        add_book.setStyleSheet(self.style.button())
         self.del_book = QPushButton("Удалить книгу")
-        self.del_book.setStyleSheet(self.style.button())
-        lable_book = QLabel("Найти по названию книги: ")
-        lable_book.setStyleSheet(self.style.label())
-        self.line_search_book = QLineEdit()
-        self.line_search_book.setStyleSheet(self.style.line_edit())
-        label_library = QLabel("Библиотека:")
-        label_library.setStyleSheet(self.style.label())
-        self.label_books_hand = QLabel("Книги на руках:")# boh - books on hand (книги на руках) P.s Да-да, с соображалкой у меня туго)))
-        self.label_books_hand.setStyleSheet(self.style.label())
         exit = QPushButton("Выход")
-        exit.setStyleSheet(self.style.button())
-        self.line_id_book = QLineEdit()
-        self.line_id_book.setStyleSheet(self.style.line_edit())
+        lable_book = QLabel("Найти по названию книги: ")
+        label_library = QLabel("Библиотека:")
+        self.label_books_hand = QLabel("Книги на руках:")
         label_id_book = QLabel("Укажите код книги: ")
+        self.line_search_book = QLineEdit()
+        self.line_id_book = QLineEdit()
+        add_book.setStyleSheet(self.style.button())
+        lable_book.setStyleSheet(self.style.label())
+        label_library.setStyleSheet(self.style.label())
+        exit.setStyleSheet(self.style.button())
         label_id_book.setStyleSheet(self.style.label())
+        self.line_search_book.setStyleSheet(self.style.line_edit())
+        self.label_books_hand.setStyleSheet(self.style.label())
+        self.line_id_book.setStyleSheet(self.style.line_edit())
+        self.del_book.setStyleSheet(self.style.button())
 
         # Задаем ввод для зачетки
         reg_number = QRegExp("[0-9]{6,6}")
@@ -214,6 +214,7 @@ class Main(QMainWindow):
         if result_del:
             self.update_table()
             self.label_books_hand.setText("Книги на руках: ")
+            self.current_student = None
         if self.numer_grade_book is None:
             pass
         if not result_del and self.numer_grade_book is not None:
