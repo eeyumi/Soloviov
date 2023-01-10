@@ -10,7 +10,6 @@ class SearchBook(QTableView):
         super().__init__()
         model = QStandardItemModel()
         query = QSqlQuery()
-        print(1)
         query.exec(f""" SELECT title, release, type_book FROM books
              WHERE title LIKE ('{title + '%'}')""")
 

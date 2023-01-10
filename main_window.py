@@ -98,17 +98,17 @@ class Main(QMainWindow):
         self.setCentralWidget(widget)
 
         """Добавляем функционал"""
-        add_student.clicked.connect(self.update_table)
-        search_student.clicked.connect(self.update_table)
+        add_student.clicked.connect(self.update_table_student)
         self.table_student.doubleClicked.connect(self.clicked_row_student)
         self.table_book.doubleClicked.connect(self.clicked_row_book)
-        add_book.clicked.connect(AddBook)
+        add_book.clicked.connect(self.update_table_book)
         self.line_search_book.textEdited.connect(self.search_book)
 
     def search_book(self):
         self.v1_box.removeWidget(self.table_book)
         self.table_book = SearchBook(self.line_search_book.text())
         self.v1_box.insertWidget(2, self.table_book)
+        self.table_book.doubleClicked.connect(self.clicked_row_book)
 
 
     def clicked_row_student(self, r):
@@ -129,13 +129,19 @@ class Main(QMainWindow):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-    def update_table(self):
+    def update_table_student(self):
         AddStudent()
         self.v0_box.removeWidget(self.table_student)
         self.table_student = TableStudent()
         self.v0_box.insertWidget(2, self.table_student)
         self.table_student.doubleClicked.connect(self.clicked_row_student)
 
+    def update_table_book(self):
+        AddBook()
+        self.v1_box.removeWidget(self.table_book)
+        self.table_book = TableBook()
+        self.v1_box.insertWidget(2, self.table_book)
+        self.table_book.doubleClicked.connect(self.clicked_row_book)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
