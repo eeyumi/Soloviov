@@ -19,9 +19,9 @@ class AddStudent(QDialog):
         self.setWindowFlag(QtCore.Qt.MSWindowsFixedSizeDialogHint)
 
         # Задаем виджеты
-        label_surname = QLabel("Фамилия: ")
-        label_name = QLabel("Имя:        ")
-        label_patronymic = QLabel("Отчество:")
+        label_surname = QLabel("Фамилия:\t")
+        label_name = QLabel("Имя:\t\t")
+        label_patronymic = QLabel("Отчество:\t")
         label_group = QLabel("Группа:")
         label_course = QLabel("Курс:")
         label_number = QLabel("Номер зачетной книжки:")
