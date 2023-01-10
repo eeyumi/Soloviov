@@ -12,7 +12,7 @@ class TableStudentBook(QTableView):
         if numer_grade_book is not None:
             query = QtSql.QSqlQuery(f"""SELECT books.title, set_books.id_BOOK, records.date_receipt 
             FROM records, set_books, books 
-            WHERE students.numer_grade_book={numer_grade_book} AND records.return_date IS NOT NULL""")
+            WHERE students.numer_grade_book={numer_grade_book} AND records.return_date IS NULL""")
             model.setColumnCount(3)
             model.setHorizontalHeaderLabels(["Название", "Код книги", "Дата получения"])
             proxy = MySortFilterProxyModel()

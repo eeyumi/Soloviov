@@ -9,7 +9,7 @@ title VARCHAR(60),
 --author VARCHAR(40),
 release INTEGER,
 type_book TEXT,
-FOREIGN KEY (type_book)  REFERENCES type_book (id_type));
+FOREIGN KEY (type_book)  REFERENCES type_book (id_type) ON DELETE CASCADE);
 """
 )
 sqlite_connection.commit()
@@ -34,7 +34,7 @@ cursor.execute(
 """ CREATE TABLE IF NOT EXISTS books_authors(
 id_books INTEGER,
 id_author INTEGER,
-FOREIGN KEY (id_books)  REFERENCES books (id_books),
+FOREIGN KEY (id_books)  REFERENCES books (id_books) ON DELETE CASCADE,
 FOREIGN KEY (id_author)  REFERENCES authors (id_author));
 """
 )

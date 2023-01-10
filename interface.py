@@ -6,6 +6,17 @@ class Connect:
         self.sqlite_connection = sqlite3.connect('LIBRARY.db')
         self.cursor = self.sqlite_connection.cursor()
 
+    def delete_student(self, numer_grade_book):
+        record = self.cursor.execute(f"SELECT id_record "
+                            f"FROM records "
+                            f"WHERE numer_grade_book={numer_grade_book}").fetchone()
+        print(record, "this record")
+        if record is not None:
+            self.cursor.execute(f"DELETE FROM records WHERE numer_grade_book={numer_grade_book}")
+        self.cursor.execute(f"DELETE FROM students WHERE numer_grade_book={numer_grade_book}")
+
+
+
     def get_student(self, fullname, squad, course):
         return self.cursor.execute(f"SELECT numer_grade_book "
                                    f"FROM students "
@@ -69,5 +80,6 @@ class Connect:
 
 if __name__ == '__main__':
     a = Connect()
-    print(a.set_book_student("Курс математического анализа. Том 1", "2020", "Математический анализ")[0])
+    # print(a.set_book_student("Курс математического анализа. Том 1", "2020", "Математический анализ")[0])
+    a.delete_student(1690307)
     a.close()
