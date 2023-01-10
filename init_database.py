@@ -173,13 +173,6 @@ try:
         a = str(sheet_ranges["D" + f"{i}"].value)
         # print(type(a))
         result += f"'{a}'"
-        a = sheet_ranges["E" + f"{i}"].value
-        # print(type(a))
-        if a is not None:
-            line = ", return_date"
-            result += "," + f"'{a}'"
-        else:
-            line = ""
             # result += f"{a}"
 
 
@@ -191,7 +184,7 @@ try:
         cursor.execute(f"""
                     INSERT
                     INTO
-                    records(numer_grade_book, id_book, date_receipt{line})
+                    records(numer_grade_book, id_book, date_receipt)
                     VALUES({result});
                     """)
         sqlite_connection.commit()

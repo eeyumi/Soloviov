@@ -14,7 +14,6 @@ from interface import Connect
 from style import Style
 
 
-
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -139,7 +138,7 @@ class Main(QMainWindow):
         self.table_book.doubleClicked.connect(self.add_record)
         self.table_boh.doubleClicked.connect(self.del_record)
         self.line_search_book.textEdited.connect(self.search_book)
-        self.del_student.clicked.connect(lambda: self.update_del_table_student(self.numer_grade_book))
+        self.del_student.clicked.connect(self.update_del_table_student)
         self.del_book.clicked.connect(self.update_del_table_book)
 
     def search_book(self):
@@ -168,7 +167,6 @@ class Main(QMainWindow):
         self.table_boh.delete()
         self.table_boh.create(numer_grade_book)
         print("ошибок нет вроде")
-
 
 
     def add_record(self, r):
@@ -248,15 +246,15 @@ class Main(QMainWindow):
         AddStudent()
         self.update_table()
 
-    def update_del_table_student(self, numer_grade_book):
+    def update_del_table_student(self):
         student = Connect()
-        result_del = student.delete_student(numer_grade_book)
+        result_del = student.delete_student(self.numer_grade_book)
         if result_del:
             self.update_table()
             self.label_books_hand.setText("Книги на руках: ")
-        if numer_grade_book is None:
+        if self.numer_grade_book is None:
             pass
-        if not result_del and numer_grade_book is not None:
+        if not result_del and self.numer_grade_book is not None:
             msg = QMessageBox()
             msg.setWindowTitle("Внимание!")
             msg.setText("У студента на руках есть книги!\nДля удаления студента этих книг быть не должно!!!")
