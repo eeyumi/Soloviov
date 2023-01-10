@@ -41,7 +41,4 @@ class TableStudentBook(QTableView):
         self.model().removeRows(0, self.model().rowCount())
 class MySortFilterProxyModel(QSortFilterProxyModel):
     def lessThan(self, source_left, source_right):
-        if (source_left.isValid() and source_right.isValid()):
-            if (source_left.column() == 1):  # <== номер колонки с числами
-                return int(source_left.data()) < int(source_right.data())
         return super(MySortFilterProxyModel, self).lessThan(source_left, source_right)
