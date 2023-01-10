@@ -2,9 +2,10 @@
 from PyQt5 import QtSql
 import sys
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QPushButton, QHBoxLayout, \
-    QVBoxLayout, QLabel, QLineEdit, QComboBox, qApp, QMessageBox
+    QVBoxLayout, QLabel, QLineEdit, QComboBox, qApp
 from PyQt5.QtCore import QRegExp
-from PyQt5.QtGui import QRegExpValidator
+from PyQt5.QtGui import QRegExpValidator, QIcon
+
 from dialog_student import AddStudent
 from dialog_book import AddBook
 from connector_student import TableStudent
@@ -37,6 +38,7 @@ class Main(QMainWindow):
         self.setWindowTitle("Библиотека")
         self.setStyleSheet(self.style.main_window())
         self.showFullScreen()
+        self.setWindowIcon(QIcon('logo.png'))
 
         """Левая сторона окна"""
         # Задаем виджеты
