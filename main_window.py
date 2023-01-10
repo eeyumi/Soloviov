@@ -10,11 +10,8 @@ from dialog_book import AddBook
 from connector_student import TableStudent
 from connector_book import TableBook
 from connector_student_book import TableStudentBook
-from search_book import SearchBook
 from interface import Connect
 
-
-# from connector import Connector
 
 
 class Main(QMainWindow):
@@ -122,9 +119,7 @@ class Main(QMainWindow):
 
         """Добавляем функционал"""
         add_student.clicked.connect(self.update_add_table_student)
-        # self.del_book.clicked.connect(self.update_del_table_book)
         add_book.clicked.connect(self.update_add_table_book)
-        # add_book.clicked.connect(self.update_add_table_book)
         exit.clicked.connect(qApp.quit)
         self.combo_squad.currentTextChanged.connect(self.update_table)
         self.combo_course.currentTextChanged.connect(self.update_table)
@@ -137,10 +132,8 @@ class Main(QMainWindow):
         self.del_book.clicked.connect(self.update_del_table_book)
 
     def search_book(self):
-        self.v1_box.removeWidget(self.table_book)
-        self.table_book = SearchBook(self.line_search_book.text())
-        self.v1_box.insertWidget(2, self.table_book)
-        self.table_book.clicked.connect(self.clicked_row_book)
+        self.table_book.delete()
+        self.table_book.search_book(self.line_search_book.text())
 
     def clicked_row_book(self, r):
         column = r.column()
@@ -148,8 +141,8 @@ class Main(QMainWindow):
             column = 0
         a = Connect()
         self.id_books = a.set_book_student(self.table_book.model().index(r.row(), column).data(),
-                                            self.table_book.model().index(r.row(), column + 1).data(),
-                                            self.table_book.model().index(r.row(), column + 2).data())[0]
+                                            self.table_book.model().index(r.row(), column + 2).data(),
+                                            self.table_book.model().index(r.row(), column + 3).data())[0]
 
 
     def clicked_row_student(self, r):
@@ -162,9 +155,8 @@ class Main(QMainWindow):
                                                self.table_student.model().index(r.row(), column + 2).data())[0])
         print(self.numer_grade_book)
         self.label_books_hand.setText("Книги на руках: " + self.table_student.model().index(r.row(), column).data())
-        self.v1_box.removeWidget(self.table_boh)
-        self.table_boh = TableStudentBook(self.numer_grade_book)
-        self.v1_box.insertWidget(5, self.table_boh)
+        self.table_boh.delete()
+        self.table_boh.create(self.numer_grade_book)
 
     def update_add_table_student(self):
         AddStudent()
@@ -173,7 +165,6 @@ class Main(QMainWindow):
     def update_del_table_student(self, numer_grade_book):
         student = Connect()
         result_del = student.delete_student(numer_grade_book)
-        print(result_del)
         if result_del:
             self.update_table()
         else:
@@ -184,34 +175,26 @@ class Main(QMainWindow):
             msg.exec_()
 
     def update_table(self):
-        self.v0_box.removeWidget(self.table_student)
-        self.table_student = TableStudent(
+        self.table_student.delete()
+        self.table_student.create(
             None if self.combo_squad.currentText() == "Группа" else self.combo_squad.currentText(),
             None if self.combo_course.currentText() == "Курс" else self.combo_course.currentText())
-        self.v0_box.insertWidget(2, self.table_student)
-        self.table_student.clicked.connect(self.clicked_row_student)
 
     def update_table_book_student(self):
-        self.v1_box.removeWidget(self.table_boh)
-        self.table_boh = TableStudentBook()
-        self.v1_box.insertWidget(2, self.table_boh)
-        self.table_boh.clicked.connect(self.clicked_row_student)
+        self.table_boh.delete()
+        self.table_boh.create(self.numer_grade_book)
 
     def update_add_table_book(self):
         AddBook()
-        self.v1_box.removeWidget(self.table_book)
-        self.table_book = TableBook()
-        self.v1_box.insertWidget(2, self.table_book)
-        self.table_book.clicked.connect(self.clicked_row_book)
+        self.table_book.delete()
+        self.table_book.create()
 
     def update_del_table_book(self):
         student = Connect()
         result_del = student.delete_book(self.id_books)
         print(result_del)
-        self.v1_box.removeWidget(self.table_book)
-        self.table_book = TableBook()
-        self.v1_box.insertWidget(2, self.table_book)
-        self.table_book.clicked.connect(self.clicked_row_book)
+        self.table_book.delete()
+        self.table_book.create()
 
 
 if __name__ == '__main__':
