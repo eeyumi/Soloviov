@@ -35,7 +35,8 @@ class Main(QMainWindow):
 
         # Задали окно
         self.setWindowTitle("Библиотека")
-        # self.showFullScreen()
+        self.setStyleSheet(self.style.main_window())
+        self.showFullScreen()
 
         """Левая сторона окна"""
         # Задаем виджеты
@@ -72,17 +73,23 @@ class Main(QMainWindow):
         """Правая сторона окна"""
         # Задаем виджеты
         add_book = QPushButton("Добавить книгу")
-        self.del_book = QPushButton("Удалить книгу")
-        exit = QPushButton("Выход")
-        lable_book = QLabel("Найти по названию книги: ")
-        label_library = QLabel("Библиотека:")
-        self.label_books_hand = QLabel("Книги на руках:")
-        label_id_book = QLabel("Укажите код книги: ")
-        self.line_search_book = QLineEdit()
-        self.line_id_book = QLineEdit()
         add_book.setStyleSheet(self.style.button())
+        self.del_book = QPushButton("Удалить книгу")
         self.del_book.setStyleSheet(self.style.button())
+        lable_book = QLabel("Найти по названию книги: ")
         lable_book.setStyleSheet(self.style.label())
+        self.line_search_book = QLineEdit()
+        self.line_search_book.setStyleSheet(self.style.line_edit())
+        label_library = QLabel("Библиотека:")
+        label_library.setStyleSheet(self.style.label())
+        self.label_books_hand = QLabel("Книги на руках:")# boh - books on hand (книги на руках) P.s Да-да, с соображалкой у меня туго)))
+        self.label_books_hand.setStyleSheet(self.style.label())
+        exit = QPushButton("Выход")
+        exit.setStyleSheet(self.style.button())
+        self.line_id_book = QLineEdit()
+        self.line_id_book.setStyleSheet(self.style.line_edit())
+        label_id_book = QLabel("Укажите код книги: ")
+        label_id_book.setStyleSheet(self.style.label())
 
         # Задаем ввод для зачетки
         reg_number = QRegExp("[0-9]{6,6}")
@@ -201,7 +208,6 @@ class Main(QMainWindow):
     def update_del_table_student(self):
         student = Connect()
         result_del = student.delete_student(self.numer_grade_book)
-
         if result_del:
             self.update_table()
             self.label_books_hand.setText("Книги на руках: ")

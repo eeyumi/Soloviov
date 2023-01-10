@@ -33,7 +33,7 @@ class TableStudent(QTableView):
         self.setSortingEnabled(True)
         while query.next():
             rows = model.rowCount()
-            model.setRowCount(rows + 1)
+            # model.setRowCount(rows + 1)
             model.setItem(rows, 0, QStandardItem(query.value(0)))
             model.setItem(rows, 1, QStandardItem(query.value(1)))
             model.setItem(rows, 2, QStandardItem(str(query.value(2))))
@@ -41,6 +41,8 @@ class TableStudent(QTableView):
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
         self.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.verticalHeader().setVisible(False)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)

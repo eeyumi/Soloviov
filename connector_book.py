@@ -27,6 +27,7 @@ class TableBook(QTableView):
                 model.setItem(rows, 2, QStandardItem(str(release)))
                 model.setItem(rows, 3, QStandardItem(type_book))
         self.setFixedWidth(1200)
+        self.verticalHeader().setVisible(False)
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
         self.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
@@ -51,12 +52,13 @@ class TableBook(QTableView):
         with sqlite3.connect('LIBRARY.db') as connect:
             for titles, name, release, type_book in connect.execute(f"SELECT books.title, authors.name, books.release, books.type_book FROM books JOIN books_authors ON books_authors.id_books = books.id_books JOIN authors ON authors.id_author = books_authors.id_author WHERE title like '%{self.title}%'"):
                 rows = model.rowCount()
-                model.setRowCount(rows + 1)
+                # model.setRowCount(rows + 1)
                 model.setItem(rows, 0, QStandardItem(titles))
                 model.setItem(rows, 1, QStandardItem(name))
                 model.setItem(rows, 2, QStandardItem(str(release)))
                 model.setItem(rows, 3, QStandardItem(type_book))
         self.setFixedWidth(1200)
+        self.verticalHeader().setVisible(False)
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
         self.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
