@@ -67,13 +67,15 @@ class Main(QMainWindow):
         lable_book = QLabel("Найти по названию книги: ")
         self.line_search_book = QLineEdit()
         label_library = QLabel("Библиотека:")
-        self.label_books_hand = QLabel("Книги на руках:")  # boh - books on hand (книги на руках) P.s Да-да, с соображалкой у меня туго)))
+        self.label_books_hand = QLabel(
+            "Книги на руках:")  # boh - books on hand (книги на руках) P.s Да-да, с соображалкой у меня туго)))
         get_all_book = QPushButton("Забрать все")
         get_book = QPushButton("Забрать")
         give_book = QPushButton("Выдать")
         exit = QPushButton("Выход")
         self.line_id_book = QLineEdit()
         label_id_book = QLabel("Укажите код книги: ")
+        self.current_student = None
 
         # Задаем ввод для зачетки
         reg_number = QRegExp("[0-9]{6,6}")
@@ -130,7 +132,7 @@ class Main(QMainWindow):
         self.combo_course.currentTextChanged.connect(self.update_table)
         self.table_student.clicked.connect(self.clicked_row_student)
         self.table_book.clicked.connect(self.clicked_row_book)
-        self.table_book.doubleClicked.connect(self.clicked_row_book)
+        self.table_book.doubleClicked.connect(self.add_record)
 
         self.line_search_book.textEdited.connect(self.search_book)
         self.del_student.clicked.connect(lambda: self.update_del_table_student(self.numer_grade_book))
@@ -148,9 +150,51 @@ class Main(QMainWindow):
             column = 0
         a = Connect()
         self.id_books = a.set_book_student(self.table_book.model().index(r.row(), column).data(),
-                                            self.table_book.model().index(r.row(), column + 1).data(),
-                                            self.table_book.model().index(r.row(), column + 2).data())[0]
+                                           self.table_book.model().index(r.row(), column + 2).data(),
+                                           self.table_book.model().index(r.row(), column + 3).data())[0]
 
+    def add_record(self, r):
+        column = r.column()
+        if column != 0:
+            column = 0
+        a = Connect()
+        if self.current_student is not None:
+            if len(self.line_id_book.text()) == 6:
+                if a.get_bool_id_book(self.line_id_book.text()) is not None:
+                    print("ji")
+                    id_book = a.get_id_book(self.table_book.model().index(r.row(), column).data(),
+                                            self.table_book.model().index(r.row(), column + 2).data(),
+                                            self.table_book.model().index(r.row(), column + 3).data())[0]
+                    bool_free = a.get_free_book(id_book, self.current_student, self.line_id_book)
+                    if bool_free:
+
+                        self.id_books = a.set_book_student(self.table_book.model().index(r.row(), column).data(),
+                                                           self.table_book.model().index(r.row(), column + 1).data(),
+                                                           self.table_book.model().index(r.row(), column + 2).data())[0]
+                    else:
+                        msg = QMessageBox()
+                        msg.setWindowTitle("Внимание!")
+                        msg.setText("Данная книга занята!!!")
+                        msg.setIcon(QMessageBox.Warning)
+                        msg.exec_()
+                else:
+                    msg = QMessageBox()
+                    msg.setWindowTitle("Внимание!")
+                    msg.setText("Указан не верный код книги!!!")
+                    msg.setIcon(QMessageBox.Warning)
+                    msg.exec_()
+            else:
+                msg = QMessageBox()
+                msg.setWindowTitle("Внимание!")
+                msg.setText("Укажите какую книгу вы хотите дать студенту!!!")
+                msg.setIcon(QMessageBox.Warning)
+                msg.exec_()
+        else:
+            msg = QMessageBox()
+            msg.setWindowTitle("Внимание!")
+            msg.setText("Укажите студента, которому хотите дать книгу!")
+            msg.setIcon(QMessageBox.Warning)
+            msg.exec_()
 
     def clicked_row_student(self, r):
         column = r.column()
@@ -161,7 +205,8 @@ class Main(QMainWindow):
                                                self.table_student.model().index(r.row(), column + 1).data(),
                                                self.table_student.model().index(r.row(), column + 2).data())[0])
         print(self.numer_grade_book)
-        self.label_books_hand.setText("Книги на руках: " + self.table_student.model().index(r.row(), column).data())
+        self.current_student = self.table_student.model().index(r.row(), column).data()
+        self.label_books_hand.setText("Книги на руках: " + self.current_student)
         self.v1_box.removeWidget(self.table_boh)
         self.table_boh = TableStudentBook(self.numer_grade_book)
         self.v1_box.insertWidget(5, self.table_boh)

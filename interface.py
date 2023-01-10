@@ -37,11 +37,51 @@ class Connect:
         except sqlite3.Error as error:
             print("Ошибка при удалении записи с SQLite:", error, "!!!!!!")
 
+    def get_bool_id_book(self, id_book):
+        return self.cursor.execute(f"SELECT id_books "
+                                   f"FROM set_books "
+                                   f"WHERE id_BOOK={id_book}").fetchone()
+    def get_id_book(self, title, release, type_book):
+        return self.cursor.execute(f"SELECT id_books "
+                                   f"FROM books "
+                                   f"WHERE title='{title}' AND release={release} AND type_book='{type_book}'").fetchone()
 
     def get_student(self, fullname, squad, course):
         return self.cursor.execute(f"SELECT numer_grade_book "
                                    f"FROM students "
                                    f"WHERE fullname='{fullname}' AND squad='{squad}' AND course={course}").fetchone()
+    def get_free_book(self, book, current_student, id_book ):
+        bool_con = self.cursor.execute(f"SELECT id_BOOK "
+                            f"FROM set_books "
+                            f"WHERE id_books={book} AND id_BOOK={id_book}").fetchone()
+        print(bool_con)
+        if bool_con is not None:
+            numer_grade_book = self.cursor.execute(f"SELECT numer_grade_book "
+                            f"FROM students "
+                            f"WHERE fullname='{current_student}'").fetchone()[0]
+            result = self.cursor.execute(f"SELECT id_books "
+                                f"FROM records "
+                                f"WHERE id_books={id_book} AND  numer_grade_book={numer_grade_book}").fetchone()
+            if result is not None:
+                return True
+            else:
+                return False
+        else:
+            return False
+        #
+        # id_BOOK = self.cursor.execute(f"SELECT id_BOOK "
+        #                     f"FROM set_books "
+        #                     f"WHERE id_books={book}").fetchone()
+        # print(id_BOOK, " id_BOOK 1")
+        # if id_BOOK is not None:
+        #     id_BOOK = self.cursor.execute(f"SELECT id_book "
+        #                         f"FROM records "
+        #                         f"WHERE id_book={id_BOOK[0]}").fetchone()
+        #     print(id_BOOK, " id_BOOK 2")
+        #     if id_BOOK is not None:
+        #         return True
+        # else:
+        #     return False
 
     def set_book_student(self, title, release, type_book):
         return self.cursor.execute(f"SELECT id_books "
@@ -107,5 +147,5 @@ class Connect:
 if __name__ == '__main__':
     a = Connect()
     # print(a.set_book_student("Курс математического анализа. Том 1", "2020", "Математический анализ")[0])
-    print(a.delete_book(14))
+    print(a.get_free_book(49))
     a.close()
