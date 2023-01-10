@@ -4,11 +4,13 @@ import sys
 
 from PyQt5.QtCore import QAbstractItemModel
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QPushButton, QHBoxLayout, \
-    QVBoxLayout, QDesktopWidget, QLabel, QTableWidget, QLineEdit
+    QVBoxLayout, QDesktopWidget, QLabel, QTableWidget, QLineEdit, QComboBox
 from dialog_student import AddStudent
 from dialog_book import AddBook
 from connector_student import TableStudent
 from connector_book import TableBook
+from search_book import SearchBook
+from interface import Connect
 
 
 # from connector import Connector
@@ -115,6 +117,15 @@ class Main(QMainWindow):
         self.table_book.doubleClicked.connect(self.clicked_row_book)
 
 
+
+    def clicked_row_book(self, r):
+        column = r.column()
+        if column != 0:
+            column = 0
+        a = Connect()
+        print(a.get_student(self.table_book.model().index(r.row(), column).data(),
+                            self.table_book.model().index(r.row(), column + 1).data(),
+                            self.table_book.model().index(r.row(), column + 2).data())[0])
     def clicked_row_student(self, r):
         column = r.column()
         if column != 0:
