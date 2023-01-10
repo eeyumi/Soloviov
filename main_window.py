@@ -2,7 +2,7 @@
 from PyQt5 import QtSql
 import sys
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QPushButton, QHBoxLayout, \
-    QVBoxLayout, QDesktopWidget, QLabel, QTableWidget, QLineEdit, QComboBox
+    QVBoxLayout, QDesktopWidget, QLabel, QLineEdit, QComboBox
 from dialog_student import AddStudent
 from dialog_book import AddBook
 from connector_student import TableStudent
@@ -27,6 +27,7 @@ class Main(QMainWindow):
         db.open()
         self.table_student = TableStudent()
         self.table_book = TableBook()
+        self.table_boh = TableStudentBook()
         # Задали окно
         self.setWindowTitle("Библиотека")
         self.setMinimumSize(1400, 850)
@@ -61,14 +62,12 @@ class Main(QMainWindow):
         add_book = QPushButton("Добавить книгу")
         lable_book = QLabel("Найти по названию книги: ")
         self.line_search_book = QLineEdit()
-        # line_search_book.stateChanged.connect(self._stateChanged_slot_release)
         label_library = QLabel("Библиотека:")
         label_boh = QLabel(
             "Книги на руках:")  # boh - books on hand (книги на руках) P.s Да-да, с соображалкой у меня туго)))
         get_all_book = QPushButton("Забрать все")
         get_book = QPushButton("Забрать")
         give_book = QPushButton("Выдать")
-        self.table_boh = TableStudentBook()
 
         # Делаем горизонтальные макеты
         h1_box = QHBoxLayout()
@@ -131,9 +130,10 @@ class Main(QMainWindow):
         if column != 0:
             column = 0
         a = Connect()
-        print(a.get_student(self.table_student.model().index(r.row(), column).data(),
-                            self.table_student.model().index(r.row(), column + 1).data(),
-                            self.table_student.model().index(r.row(), column + 2).data())[0])
+        numer_grade_book = (a.get_student(self.table_student.model().index(r.row(), column).data(),
+                                    self.table_student.model().index(r.row(), column + 1).data(),
+                                    self.table_student.model().index(r.row(), column + 2).data())[0])
+        print(numer_grade_book)
 
     def center(self):
         qr = self.frameGeometry()
