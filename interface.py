@@ -52,6 +52,11 @@ class Connect:
         value_line = f"{numer_grade_book}, '{fullname}', '{squad}', {course}"
         self.make_request("students", "numer_grade_book, fullname, squad, course", value_line)
 
+    def add_record(self, user_id_book):
+        self.cursor.execute(f"SELECT id_books "
+                            f"FROM books "
+                            f"WHERE title='{title}' AND release={release} AND type_book='{type_book}'").fetchone()
+
     def add_book(self, title, after, type_book, release):
         value_line = f"'{title}',{release} , '{type_book}'"
         id_author = self.cursor.execute(f"SELECT id_author FROM authors WHERE name='{after}'").fetchone()
