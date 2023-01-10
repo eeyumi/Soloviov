@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtSql
 import sys
-
+from interface import Connect
 from PyQt5.QtCore import QAbstractItemModel
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QPushButton, QHBoxLayout, \
     QVBoxLayout, QDesktopWidget, QLabel, QTableWidget, QLineEdit
@@ -109,7 +109,11 @@ class Main(QMainWindow):
         column = r.column()
         if column != 0:
             column = 0
-        print(self.table_student.model().index(r.row(),column).data()+" "+self.table_student.model().index(r.row(),column+1).data()+" "+self.table_student.model().index(r.row(),column+2).data())
+        a = Connect()
+        print(a.get_student(self.table_student.model().index(r.row(),column).data(),
+                            self.table_student.model().index(r.row(),column+1).data(),
+                            self.table_student.model().index(r.row(),column+2).data())[0])
+
     def center(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()

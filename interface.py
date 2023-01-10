@@ -6,58 +6,36 @@ class Connect:
         self.sqlite_connection = sqlite3.connect('LIBRARY.db')
         self.cursor = self.sqlite_connection.cursor()
 
+    def get_student(self, fullname, squad, course):
+        return self.cursor.execute(f"SELECT numer_grade_book "
+                                   f"FROM students "
+                                   f"WHERE fullname='{fullname}' AND squad='{squad}' AND course={course}").fetchone()
+
     def add_student(self, numer_grade_book, fullname, squad, course):
         value_line = f"{numer_grade_book}, '{fullname}', '{squad}', {course}"
         self.make_request("students", "numer_grade_book, fullname, squad, course", value_line)
 
     def add_book(self, title, after, type_book, release):
         value_line = f"'{title}',{release} , '{type_book}'"
-
-
-        # добав запись книжки
-        # получает id_author из authors
         id_author = self.cursor.execute(f"SELECT id_author FROM authors WHERE name='{after}'").fetchone()
-        print(id_author, "id_author")
-        # создает запись в authors если её нет
         if id_author is None:
-            print("id_author if true")
             self.make_request("authors", "name", f"'{after}'")
-            print("make authors")
             id_author = self.cursor.execute(f"SELECT id_author FROM authors WHERE name='{after}'").fetchone()
-            print(id_author, "id_author")
-        # ПОЛУЧАЕТ id_books из books
-        id_books = self.cursor.execute(
-            f"SELECT id_books FROM books WHERE title='{title}' AND release={release}").fetchone()
-        print(id_books, "id_books")
-        # проверяет есть ли запись в books_authors с id_author и id_books
+        id_books = self.cursor.execute(f"SELECT id_books "
+                                       f"FROM books "
+                                       f"WHERE title='{title}' AND release={release}").fetchone()
         if id_books is None:
-            print("id_books if true")
             self.make_request("books", "title, release, type_book", value_line)
-            print("make authors")
-            id_books = self.cursor.execute(
-                f"SELECT id_books FROM books WHERE title='{title}' AND release={release}").fetchone()
+            id_books = self.cursor.execute(f"SELECT id_books "
+                                           f"FROM books "
+                                           f"WHERE title='{title}' AND release={release}").fetchone()
         info = self.cursor.execute(f"""
         SELECT id_books, id_author 
         FROM books_authors 
         WHERE id_books={id_books[0]} AND id_author={id_author[0]}"""
                                    ).fetchone()
-        print(info, "info")
-        # создает запись
         if info is None:
-            print("info if true")
             self.make_request("books_authors", "id_books, id_author", f"{id_books[0]}, {id_author[0]}")
-            # info = self.cursor.execute(f"""
-            #         SELECT id_books, id_author
-            #         FROM books_authors
-            #         WHERE id_books={id_books[0]} AND id_author={id_author[0]}"""
-            #                            ).fetchone()
-        # print(info, "info <==")
-        #
-        #
-        # value_line = f"{after}, '{title}', '{type_book}'"
-        # self.make_request("books", "title, release, type_book", value_line)
-
-        # pass
 
     def make_request(self, name_table, first_values, second_values):
         try:
@@ -86,5 +64,5 @@ class Connect:
 
 if __name__ == '__main__':
     a = Connect()
-    a.add_book("aorrrr", "nassss", "2332", "type")
+    print(a.get_student("Цветков Фёдор Фёдорович", "ИТ", 1)[0])
     a.close()

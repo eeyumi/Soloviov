@@ -45,7 +45,7 @@ cursor.execute(
 """ CREATE TABLE IF NOT EXISTS students(
 numer_grade_book INTEGER PRIMARY KEY,
 fullname VARCHAR(40),
-squad VARCHAR(6),
+squad VARCHAR(3),
 course INTEGER);
 """
 )
