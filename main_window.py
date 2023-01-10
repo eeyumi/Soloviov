@@ -30,11 +30,10 @@ class Main(QMainWindow):
         self.table_boh = TableStudentBook()
         # Задали окно
         self.setWindowTitle("Библиотека")
-        # self.showFullScreen()
+        #self.showFullScreen()
 
         """Левая сторона окна"""
         # Задаем виджеты
-        # search_student = QPushButton("Поиск")
         add_student = QPushButton("Добавить студента")
         self.del_student = QPushButton("Удалить студента")
         label_student = QLabel("Студенты:")
@@ -106,20 +105,19 @@ class Main(QMainWindow):
 
         """Добавляем функционал"""
         add_student.clicked.connect(self.update_add_table_student)
-
         add_book.clicked.connect(self.update_table_book)
         exit.clicked.connect(qApp.quit)
         self.combo_squad.currentTextChanged.connect(self.update_table)
         self.combo_course.currentTextChanged.connect(self.update_table)
-        self.table_student.doubleClicked.connect(self.clicked_row_student)
-        self.table_book.doubleClicked.connect(self.clicked_row_book)
+        self.table_student.clicked.connect(self.clicked_row_student)
+        self.table_book.clicked.connect(self.clicked_row_book)
         self.line_search_book.textEdited.connect(self.search_book)
 
     def search_book(self):
         self.v1_box.removeWidget(self.table_book)
         self.table_book = SearchBook(self.line_search_book.text())
         self.v1_box.insertWidget(2, self.table_book)
-        self.table_book.doubleClicked.connect(self.clicked_row_book)
+        self.table_book.clicked.connect(self.clicked_row_book)
 
     def clicked_row_book(self, r):
         column = r.column()

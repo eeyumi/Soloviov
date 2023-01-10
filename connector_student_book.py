@@ -17,7 +17,7 @@ class TableStudentBook(QTableView):
         self.setSortingEnabled(True)
         if numer_grade_book is not None:
             with sqlite3.connect('LIBRARY.db') as connect:
-                for title, id_BOOK, date_receipt in connect.execute(f"""SELECT books.title, set_books.id_BOOK, records.date_receipt FROM books INNER JOIN set_books ON set_books.id_books = books.id_books INNER JOIN records ON records.id_book = set_books.id_BOOK WHERE records.numer_grade_book = {numer_grade_book} AND records.return_date IS NULL"""):
+                for title, id_BOOK, date_receipt in connect.execute(f'SELECT books.title, set_books.id_BOOK, records.date_receipt FROM books INNER JOIN set_books ON set_books.id_books = books.id_books INNER JOIN records ON records.id_book = set_books.id_BOOK WHERE records.numer_grade_book = {numer_grade_book} AND records.return_date IS NULL'):
                     rows = model.rowCount()
                     model.setRowCount(rows + 1)
                     model.setItem(rows, 0, QStandardItem(title))
