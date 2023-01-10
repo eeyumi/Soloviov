@@ -12,6 +12,7 @@ from connector_book import TableBook
 from connector_student_book import TableStudentBook
 from interface import Connect
 from style import Style
+from message_box import MessageBox
 
 
 class Main(QMainWindow):
@@ -146,97 +147,54 @@ class Main(QMainWindow):
         self.table_book.search_book(self.line_search_book.text())
 
     def clicked_row_book(self, r):
-        column = r.column()
-        if column != 0:
-            column = 0
+        column = 0
         a = Connect()
         self.id_books = a.set_book_student(self.table_book.model().index(r.row(), column).data(),
                                            self.table_book.model().index(r.row(), column + 2).data(),
                                            self.table_book.model().index(r.row(), column + 3).data())[0]
 
     def del_record(self, r):
-        column = r.column()
-        if column != 0:
-            column = 0
+        column = 0
         a = Connect()
         numer_grade_book = a.get_numer_grade_book(self.current_student)[0]
         code_book = self.table_boh.model().index(r.row(), column + 1).data()
-        print("\n\n", numer_grade_book)
-        print(code_book)
         a.delete_record(numer_grade_book, code_book)
         self.table_boh.delete()
         self.table_boh.create(numer_grade_book)
-        print("ошибок нет вроде")
-
 
     def add_record(self, r):
-        column = r.column()
-        if column != 0:
-            column = 0
+        column = 0
         a = Connect()
+        if self.current_student is None:
+            return
         numer_grade_book = a.get_numer_grade_book(self.current_student)[0]
         code_book = self.line_id_book.text()
         if self.current_student is not None:
             if len(code_book) == 6:
-                print(code_book)
-                # if a.get_bool_id_book(self.line_id_book.text(), ) is not None:
-                print("ji")
                 id_book = a.get_id_book(self.table_book.model().index(r.row(), column).data(),
                                         self.table_book.model().index(r.row(), column + 2).data(),
                                         self.table_book.model().index(r.row(), column + 3).data())[0]
-                print(code_book, "Код книги")
-                print(id_book, "ID книги")
                 bool_exist = a.get_bool_id_book(code_book, id_book)
-                print(bool_exist, " <=====")
                 if bool_exist is not None:
                     if a.get_record_free(code_book):
                         a.add_record(numer_grade_book, code_book)
-                        print("Можно записать")
                         self.table_boh.delete()
                         self.table_boh.create(numer_grade_book)
-                    #
-                    # self.id_books = a.set_book_student(self.table_book.model().index(r.row(), column).data(),
-                    #                                        self.table_book.model().index(r.row(), column + 1).data(),
-                    #                                        self.table_book.model().index(r.row(), column + 2).data())[0]
-                    # print("exist")
-                    # numer_grade_book =
-
                     else:
-                        msg = QMessageBox()
-                        msg.setWindowTitle("Внимание!")
-                        msg.setText("Данная книга занята!!!")
-                        msg.setIcon(QMessageBox.Warning)
-                        msg.exec_()
-
-
+                        MessageBox("Данная книга занята!!!")
                 else:
-                    msg = QMessageBox()
-                    msg.setWindowTitle("Внимание!")
-                    msg.setText("К этой книге не относится этот экземпляр!!!")
-                    msg.setIcon(QMessageBox.Warning)
-                    msg.exec_()
+                    MessageBox("К этой книге не относится этот экземпляр!!!")
             else:
-                msg = QMessageBox()
-                msg.setWindowTitle("Внимание!")
-                msg.setText("Укажите код книги, которую вы хотите дать студенту!!!")
-                msg.setIcon(QMessageBox.Warning)
-                msg.exec_()
+                MessageBox("Укажите код книги, которую вы хотите дать студенту!!!")
         else:
-            msg = QMessageBox()
-            msg.setWindowTitle("Внимание!")
-            msg.setText("Укажите студента, которому хотите дать книгу!")
-            msg.setIcon(QMessageBox.Warning)
-            msg.exec_()
+            MessageBox("Укажите студента, которому хотите дать книгу!")
 
     def clicked_row_student(self, r):
-        column = r.column()
-        if column != 0:
-            column = 0
+        column = 0
         a = Connect()
         self.numer_grade_book = (a.get_student(self.table_student.model().index(r.row(), column).data(),
                                                self.table_student.model().index(r.row(), column + 1).data(),
                                                self.table_student.model().index(r.row(), column + 2).data())[0])
-        print(self.numer_grade_book)
         self.current_student = self.table_student.model().index(r.row(), column).data()
         self.label_books_hand.setText("Книги на руках: " + self.current_student)
         self.table_boh.delete()
@@ -255,11 +213,7 @@ class Main(QMainWindow):
         if self.numer_grade_book is None:
             pass
         if not result_del and self.numer_grade_book is not None:
-            msg = QMessageBox()
-            msg.setWindowTitle("Внимание!")
-            msg.setText("У студента на руках есть книги!\nДля удаления студента этих книг быть не должно!!!")
-            msg.setIcon(QMessageBox.Warning)
-            msg.exec_()
+            MessageBox("У студента на руках есть книги!\nДля удаления студента этих книг быть не должно!!!")
 
     def update_table(self):
         self.table_student.delete()
