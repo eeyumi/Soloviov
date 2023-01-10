@@ -17,6 +17,8 @@ from interface import Connect
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.numer_grade_book = None
+        self.id_books = None
         self.initUI()
 
     def initUI(self):
@@ -33,7 +35,6 @@ class Main(QMainWindow):
 
         """Левая сторона окна"""
         # Задаем виджеты
-        # search_student = QPushButton("Поиск")
         add_student = QPushButton("Добавить студента")
         self.del_student = QPushButton("Удалить студента")
         label_student = QLabel("Студенты:")
@@ -167,7 +168,10 @@ class Main(QMainWindow):
         result_del = student.delete_student(numer_grade_book)
         if result_del:
             self.update_table()
-        else:
+            self.label_books_hand.setText("Книги на руках: ")
+        if numer_grade_book is None:
+            pass
+        if not result_del and numer_grade_book is not None:
             msg = QMessageBox()
             msg.setWindowTitle("Внимание!")
             msg.setText("У студента на руках есть книги!\nДля удаления студента этих книг быть не должно!!!")
@@ -195,6 +199,7 @@ class Main(QMainWindow):
         print(result_del)
         self.table_book.delete()
         self.table_book.create()
+
 
 
 if __name__ == '__main__':
