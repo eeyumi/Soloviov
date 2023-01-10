@@ -67,7 +67,6 @@ id_record INTEGER PRIMARY KEY AUTOINCREMENT,
 numer_grade_book INTEGER,
 id_book INTEGER UNIQUE,
 date_receipt DATE NOT NULL,
-return_date DATE DEFAULT NULL,
 FOREIGN KEY (numer_grade_book)  REFERENCES students (numer_grade_book),
 FOREIGN KEY (id_book)  REFERENCES set_books (id_BOOK) ON DELETE CASCADE);
 """

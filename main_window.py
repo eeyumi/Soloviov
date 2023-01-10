@@ -77,7 +77,6 @@ class Main(QMainWindow):
         lable_book.setStyleSheet(self.style.label())
         self.line_search_book = QLineEdit()
         label_library = QLabel("Библиотека:")
-        label_library.setStyleSheet(self.style.label())
         self.label_books_hand = QLabel("Книги на руках:")  # boh - books on hand (книги на руках) P.s Да-да, с соображалкой у меня туго)))
         get_all_book = QPushButton("Забрать все")
         get_book = QPushButton("Забрать")
@@ -85,6 +84,7 @@ class Main(QMainWindow):
         exit = QPushButton("Выход")
         self.line_id_book = QLineEdit()
         label_id_book = QLabel("Укажите код книги: ")
+        self.current_student = None
 
         # Задаем ввод для зачетки
         reg_number = QRegExp("[0-9]{6,6}")
@@ -139,8 +139,8 @@ class Main(QMainWindow):
         self.combo_course.currentTextChanged.connect(self.update_table)
         self.table_student.clicked.connect(self.clicked_row_student)
         self.table_book.clicked.connect(self.clicked_row_book)
-        self.table_book.doubleClicked.connect(self.clicked_row_book)
-
+        self.table_book.doubleClicked.connect(self.add_record)
+        self.table_boh.doubleClicked.connect(self.del_record)
         self.line_search_book.textEdited.connect(self.search_book)
         self.del_student.clicked.connect(lambda: self.update_del_table_student(self.numer_grade_book))
         self.del_book.clicked.connect(self.update_del_table_book)
@@ -155,9 +155,83 @@ class Main(QMainWindow):
             column = 0
         a = Connect()
         self.id_books = a.set_book_student(self.table_book.model().index(r.row(), column).data(),
-                                            self.table_book.model().index(r.row(), column + 2).data(),
-                                            self.table_book.model().index(r.row(), column + 3).data())[0]
+                                           self.table_book.model().index(r.row(), column + 2).data(),
+                                           self.table_book.model().index(r.row(), column + 3).data())[0]
 
+    def del_record(self, r):
+        column = r.column()
+        if column != 0:
+            column = 0
+        a = Connect()
+        numer_grade_book = a.get_numer_grade_book(self.current_student)[0]
+        code_book = self.table_boh.model().index(r.row(), column + 1).data()
+        print("\n\n", numer_grade_book)
+        print(code_book)
+        a.delete_record(numer_grade_book, code_book)
+        self.table_boh.delete()
+        self.table_boh.create(numer_grade_book)
+        print("ошибок нет вроде")
+
+
+
+    def add_record(self, r):
+        column = r.column()
+        if column != 0:
+            column = 0
+        a = Connect()
+        numer_grade_book = a.get_numer_grade_book(self.current_student)[0]
+        code_book = self.line_id_book.text()
+        if self.current_student is not None:
+            if len(code_book) == 6:
+                print(code_book)
+                # if a.get_bool_id_book(self.line_id_book.text(), ) is not None:
+                print("ji")
+                id_book = a.get_id_book(self.table_book.model().index(r.row(), column).data(),
+                                        self.table_book.model().index(r.row(), column + 2).data(),
+                                        self.table_book.model().index(r.row(), column + 3).data())[0]
+                print(code_book, "Код книги")
+                print(id_book, "ID книги")
+                bool_exist = a.get_bool_id_book(code_book, id_book)
+                print(bool_exist, " <=====")
+                if bool_exist is not None:
+                    if a.get_record_free(code_book):
+                        a.add_record(numer_grade_book, code_book)
+                        print("Можно записать")
+                        self.table_boh.delete()
+                        self.table_boh.create(numer_grade_book)
+                    #
+                    # self.id_books = a.set_book_student(self.table_book.model().index(r.row(), column).data(),
+                    #                                        self.table_book.model().index(r.row(), column + 1).data(),
+                    #                                        self.table_book.model().index(r.row(), column + 2).data())[0]
+                    # print("exist")
+                    # numer_grade_book =
+
+                    else:
+                        msg = QMessageBox()
+                        msg.setWindowTitle("Внимание!")
+                        msg.setText("Данная книга занята!!!")
+                        msg.setIcon(QMessageBox.Warning)
+                        msg.exec_()
+
+
+                else:
+                    msg = QMessageBox()
+                    msg.setWindowTitle("Внимание!")
+                    msg.setText("К этой книге не относится этот экземпляр!!!")
+                    msg.setIcon(QMessageBox.Warning)
+                    msg.exec_()
+            else:
+                msg = QMessageBox()
+                msg.setWindowTitle("Внимание!")
+                msg.setText("Укажите код книги, которую вы хотите дать студенту!!!")
+                msg.setIcon(QMessageBox.Warning)
+                msg.exec_()
+        else:
+            msg = QMessageBox()
+            msg.setWindowTitle("Внимание!")
+            msg.setText("Укажите студента, которому хотите дать книгу!")
+            msg.setIcon(QMessageBox.Warning)
+            msg.exec_()
 
     def clicked_row_student(self, r):
         column = r.column()
@@ -168,7 +242,8 @@ class Main(QMainWindow):
                                                self.table_student.model().index(r.row(), column + 1).data(),
                                                self.table_student.model().index(r.row(), column + 2).data())[0])
         print(self.numer_grade_book)
-        self.label_books_hand.setText("Книги на руках: " + self.table_student.model().index(r.row(), column).data())
+        self.current_student = self.table_student.model().index(r.row(), column).data()
+        self.label_books_hand.setText("Книги на руках: " + self.current_student)
         self.table_boh.delete()
         self.table_boh.create(self.numer_grade_book)
 
@@ -212,7 +287,6 @@ class Main(QMainWindow):
         print(result_del)
         self.table_book.delete()
         self.table_book.create()
-
 
 
 if __name__ == '__main__':
