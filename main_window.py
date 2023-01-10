@@ -9,6 +9,8 @@ from dialog_student import AddStudent
 from dialog_book import AddBook
 from connector_student import TableStudent
 from connector_book import TableBook
+from search_book import SearchBook
+from interface import Connect
 
 
 # from connector import Connector
@@ -59,7 +61,7 @@ class Main(QMainWindow):
         # Задаем виджеты
         add_book = QPushButton("Добавить книгу")
         lable_book = QLabel("Найти по названию книги: ")
-        line_search_book = QLineEdit()
+        self.line_search_book = QLineEdit()
         # line_search_book.stateChanged.connect(self._stateChanged_slot_release)
         label_library = QLabel("Библиотека:")
         label_boh = QLabel(
@@ -74,7 +76,7 @@ class Main(QMainWindow):
         h1_box.addStretch()
         h1_box.addWidget(add_book)
         h1_box.addWidget(lable_book)
-        h1_box.addWidget(line_search_book)
+        h1_box.addWidget(self.line_search_book)
         h1_box.addStretch()
 
         h2_box = QHBoxLayout()
@@ -83,18 +85,18 @@ class Main(QMainWindow):
         h2_box.addWidget(give_book)
 
         # Делаем вертикальный макет
-        v1_box = QVBoxLayout()
-        v1_box.addLayout(h1_box)
-        v1_box.addWidget(label_library)
-        v1_box.addWidget(self.table_book)
-        v1_box.addWidget(label_boh)
-        v1_box.addLayout(h2_box)
-        v1_box.addWidget(table_boh)
+        self.v1_box = QVBoxLayout()
+        self.v1_box.addLayout(h1_box)
+        self.v1_box.addWidget(label_library)
+        self.v1_box.addWidget(self.table_book)
+        self.v1_box.addWidget(label_boh)
+        self.v1_box.addLayout(h2_box)
+        self.v1_box.addWidget(table_boh)
 
         """Соединяем левую и правую часть"""
         h3_box = QHBoxLayout()
         h3_box.addLayout(self.v0_box)
-        h3_box.addLayout(v1_box)
+        h3_box.addLayout(self.v1_box)
 
         # Переносим макеты в окно
         widget = QWidget()
@@ -102,16 +104,29 @@ class Main(QMainWindow):
         self.setCentralWidget(widget)
 
         """Добавляем функционал"""
-        # Кнопка добавить студента
-        add_student.clicked.connect(self.add_student)
-        self.combo_squad.currentTextChanged.connect(self.update_table)
-        self.combo_course.currentTextChanged.connect(self.update_table)
-        self.table_student.doubleClicked.connect(self.clickedRow)
+        add_student.clicked.connect(self.update_table_student)
+        self.table_student.doubleClicked.connect(self.clicked_row_student)
+        self.table_book.doubleClicked.connect(self.clicked_row_book)
+        add_book.clicked.connect(self.update_table_book)
+        self.line_search_book.textEdited.connect(self.search_book)
 
-        # Кнопка добавить книгу
-        add_book.clicked.connect(AddBook)
+    def search_book(self):
+        self.v1_box.removeWidget(self.table_book)
+        self.table_book = SearchBook(self.line_search_book.text())
+        self.v1_box.insertWidget(2, self.table_book)
+        self.table_book.doubleClicked.connect(self.clicked_row_book)
 
-    def clickedRow(self, r):
+
+
+    def clicked_row_book(self, r):
+        column = r.column()
+        if column != 0:
+            column = 0
+        a = Connect()
+        print(a.get_student(self.table_book.model().index(r.row(), column).data(),
+                            self.table_book.model().index(r.row(), column + 1).data(),
+                            self.table_book.model().index(r.row(), column + 2).data())[0])
+    def clicked_row_student(self, r):
         column = r.column()
         if column != 0:
             column = 0
@@ -126,7 +141,7 @@ class Main(QMainWindow):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-    def add_student(self):
+    def update_table_student(self):
         AddStudent()
         self.update_table()
 
@@ -140,8 +155,14 @@ class Main(QMainWindow):
             None if self.combo_squad.currentText() == "Группа" else self.combo_squad.currentText(),
             None if self.combo_course.currentText() == "Курс" else self.combo_course.currentText())
         self.v0_box.insertWidget(2, self.table_student)
-        self.table_student.doubleClicked.connect(self.clickedRow)
+        self.table_student.doubleClicked.connect(self.clicked_row_student)
 
+    def update_table_book(self):
+        AddBook()
+        self.v1_box.removeWidget(self.table_book)
+        self.table_book = TableBook()
+        self.v1_box.insertWidget(2, self.table_book)
+        self.table_book.doubleClicked.connect(self.clicked_row_book)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
