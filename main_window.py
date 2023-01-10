@@ -151,8 +151,8 @@ class Main(QMainWindow):
         column = 0
         a = Connect()
         self.id_books = a.set_book_student(self.table_book.model().index(r.row(), column).data(),
-                                           self.table_book.model().index(r.row(), column + 2).data(),
-                                           self.table_book.model().index(r.row(), column + 3).data())[0]
+                                           self.table_book.model().index(r.row(), column + 1).data(),
+                                           self.table_book.model().index(r.row(), column + 2).data())[0]
 
     def del_record(self, r):
         column = 0
@@ -173,8 +173,8 @@ class Main(QMainWindow):
         if self.current_student is not None:
             if len(code_book) == 6:
                 id_book = a.get_id_book(self.table_book.model().index(r.row(), column).data(),
-                                        self.table_book.model().index(r.row(), column + 2).data(),
-                                        self.table_book.model().index(r.row(), column + 3).data())[0]
+                                        self.table_book.model().index(r.row(), column + 1).data(),
+                                        self.table_book.model().index(r.row(), column + 2).data())[0]
                 bool_exist = a.get_bool_id_book(code_book, id_book)
                 if bool_exist is not None:
                     if a.get_record_free(code_book):
