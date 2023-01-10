@@ -74,7 +74,7 @@ class Main(QMainWindow):
         exit = QPushButton("Выход")
         self.line_id_book = QLineEdit()
         label_id_book = QLabel("Укажите код книги: ")
-        
+
         # Задаем ввод для зачетки
         reg_number = QRegExp("[0-9]{6,6}")
         validator_number = QRegExpValidator(reg_number)
