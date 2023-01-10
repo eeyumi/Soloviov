@@ -130,7 +130,7 @@ class Main(QMainWindow):
         self.table_student.clicked.connect(self.clicked_row_student)
         self.table_book.clicked.connect(self.clicked_row_book)
         self.table_book.doubleClicked.connect(self.add_record)
-
+        self.table_boh.doubleClicked.connect(self.del_record)
         self.line_search_book.textEdited.connect(self.search_book)
         self.del_student.clicked.connect(lambda: self.update_del_table_student(self.numer_grade_book))
         self.del_book.clicked.connect(self.update_del_table_book)
@@ -148,40 +148,72 @@ class Main(QMainWindow):
                                            self.table_book.model().index(r.row(), column + 2).data(),
                                            self.table_book.model().index(r.row(), column + 3).data())[0]
 
+    def del_record(self, r):
+        column = r.column()
+        if column != 0:
+            column = 0
+        a = Connect()
+        numer_grade_book = a.get_numer_grade_book(self.current_student)[0]
+        code_book = self.table_boh.model().index(r.row(), column + 1).data()
+        print("\n\n", numer_grade_book)
+        print(code_book)
+        a.delete_record(numer_grade_book, code_book)
+        self.table_boh.delete()
+        self.table_boh.create(numer_grade_book)
+        print("ошибок нет вроде")
+
+
+
     def add_record(self, r):
         column = r.column()
         if column != 0:
             column = 0
         a = Connect()
+        numer_grade_book = a.get_numer_grade_book(self.current_student)[0]
+        code_book = self.line_id_book.text()
         if self.current_student is not None:
-            if len(self.line_id_book.text()) == 6:
-                if a.get_bool_id_book(self.line_id_book.text()) is not None:
-                    print("ji")
-                    id_book = a.get_id_book(self.table_book.model().index(r.row(), column).data(),
-                                            self.table_book.model().index(r.row(), column + 2).data(),
-                                            self.table_book.model().index(r.row(), column + 3).data())[0]
-                    bool_free = a.get_free_book(id_book, self.current_student, self.line_id_book)
-                    if bool_free:
+            if len(code_book) == 6:
+                print(code_book)
+                # if a.get_bool_id_book(self.line_id_book.text(), ) is not None:
+                print("ji")
+                id_book = a.get_id_book(self.table_book.model().index(r.row(), column).data(),
+                                        self.table_book.model().index(r.row(), column + 2).data(),
+                                        self.table_book.model().index(r.row(), column + 3).data())[0]
+                print(code_book, "Код книги")
+                print(id_book, "ID книги")
+                bool_exist = a.get_bool_id_book(code_book, id_book)
+                print(bool_exist, " <=====")
+                if bool_exist is not None:
+                    if a.get_record_free(code_book):
+                        a.add_record(numer_grade_book, code_book)
+                        print("Можно записать")
+                        self.table_boh.delete()
+                        self.table_boh.create(numer_grade_book)
+                    #
+                    # self.id_books = a.set_book_student(self.table_book.model().index(r.row(), column).data(),
+                    #                                        self.table_book.model().index(r.row(), column + 1).data(),
+                    #                                        self.table_book.model().index(r.row(), column + 2).data())[0]
+                    # print("exist")
+                    # numer_grade_book =
 
-                        self.id_books = a.set_book_student(self.table_book.model().index(r.row(), column).data(),
-                                                           self.table_book.model().index(r.row(), column + 1).data(),
-                                                           self.table_book.model().index(r.row(), column + 2).data())[0]
                     else:
                         msg = QMessageBox()
                         msg.setWindowTitle("Внимание!")
                         msg.setText("Данная книга занята!!!")
                         msg.setIcon(QMessageBox.Warning)
                         msg.exec_()
+
+
                 else:
                     msg = QMessageBox()
                     msg.setWindowTitle("Внимание!")
-                    msg.setText("Указан не верный код книги!!!")
+                    msg.setText("К этой книге не относится этот экземпляр!!!")
                     msg.setIcon(QMessageBox.Warning)
                     msg.exec_()
             else:
                 msg = QMessageBox()
                 msg.setWindowTitle("Внимание!")
-                msg.setText("Укажите какую книгу вы хотите дать студенту!!!")
+                msg.setText("Укажите код книги, которую вы хотите дать студенту!!!")
                 msg.setIcon(QMessageBox.Warning)
                 msg.exec_()
         else:

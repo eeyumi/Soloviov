@@ -29,7 +29,7 @@ class TableStudentBook(QTableView):
                     model.setRowCount(rows + 1)
                     model.setItem(rows, 0, QStandardItem(title))
                     model.setItem(rows, 1, QStandardItem(str(id_BOOK)))
-                    model.setItem(rows, 2, QStandardItem(str(date_receipt[:10])))
+                    model.setItem(rows, 2, QStandardItem(str(date_receipt))) #[:10]
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
