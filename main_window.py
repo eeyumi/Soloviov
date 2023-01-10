@@ -35,7 +35,7 @@ class Main(QMainWindow):
 
         # Задали окно
         self.setWindowTitle("Библиотека")
-        self.showFullScreen()
+        # self.showFullScreen()
 
         """Левая сторона окна"""
         # Задаем виджеты
@@ -201,6 +201,7 @@ class Main(QMainWindow):
     def update_del_table_student(self):
         student = Connect()
         result_del = student.delete_student(self.numer_grade_book)
+
         if result_del:
             self.update_table()
             self.label_books_hand.setText("Книги на руках: ")

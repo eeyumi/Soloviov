@@ -11,8 +11,9 @@ class Connect:
             record = self.cursor.execute(f"SELECT id_record "
                                          f"FROM records "
                                          f"WHERE numer_grade_book={numer_grade_book}").fetchall()
-            if record == [None]:
-                return False
+            for i in record:
+                if i is not None:
+                    return False
             self.cursor.execute(f"DELETE FROM records WHERE numer_grade_book={numer_grade_book}")
             self.cursor.execute(f"DELETE FROM students WHERE numer_grade_book={numer_grade_book}")
             print("Книга изъята")
