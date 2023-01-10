@@ -11,6 +11,7 @@ from connector_student import TableStudent
 from connector_book import TableBook
 from connector_student_book import TableStudentBook
 from interface import Connect
+from style import Style
 
 
 
@@ -19,6 +20,7 @@ class Main(QMainWindow):
         super().__init__()
         self.numer_grade_book = None
         self.id_books = None
+        self.style = Style()
         self.initUI()
 
     def initUI(self):
@@ -36,10 +38,17 @@ class Main(QMainWindow):
         """Левая сторона окна"""
         # Задаем виджеты
         add_student = QPushButton("Добавить студента")
+        add_student.setStyleSheet(self.style.button())
         self.del_student = QPushButton("Удалить студента")
+        self.del_student.setStyleSheet(self.style.button())
         label_student = QLabel("Студенты:")
+        label_student.setStyleSheet(self.style.label())
         self.combo_squad = QComboBox()
+        self.combo_squad.setStyleSheet(self.style.combo_box())
+        self.combo_squad.setMinimumSize(100, 30)
         self.combo_course = QComboBox()
+        self.combo_course.setStyleSheet(self.style.combo_box())
+        self.combo_course.setMinimumSize(100, 30)
         self.combo_squad.addItems(["Группа", "ПМФ", "БЭК", "ПМ", "АВТ", "ЦТ", "ИТ", "ВТ", "ТМ", "ДП", "ЭП"])
         self.combo_course.addItems(["Курс", "1", "2", "3", "4"])
 
@@ -61,10 +70,14 @@ class Main(QMainWindow):
         """Правая сторона окна"""
         # Задаем виджеты
         add_book = QPushButton("Добавить книгу")
+        add_book.setStyleSheet(self.style.button())
         self.del_book = QPushButton("Удалить книгу")
+        self.del_book.setStyleSheet(self.style.button())
         lable_book = QLabel("Найти по названию книги: ")
+        lable_book.setStyleSheet(self.style.label())
         self.line_search_book = QLineEdit()
         label_library = QLabel("Библиотека:")
+        label_library.setStyleSheet(self.style.label())
         self.label_books_hand = QLabel("Книги на руках:")  # boh - books on hand (книги на руках) P.s Да-да, с соображалкой у меня туго)))
         get_all_book = QPushButton("Забрать все")
         get_book = QPushButton("Забрать")
