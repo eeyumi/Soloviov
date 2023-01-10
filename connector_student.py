@@ -7,17 +7,23 @@ from PyQt5.QtGui import QStandardItem, QStandardItemModel
 class TableStudent(QTableView):
     def __init__(self, squad=None, course=None):
         super().__init__()
+        self.squad = squad
+        self.course = course
+        self.create(self.squad, self.course)
+    def create(self, squad, course):
+        self.squad = squad
+        self.course = course
         model = QStandardItemModel()
         model.clear()
-        print(squad, course)
-        if squad is not None and course is not None:
+        print(self.squad, self.course)
+        if self.squad is not None and self.course is not None:
             query = QtSql.QSqlQuery(f"""SELECT fullname, squad, course FROM students WHERE squad='{squad}' AND course='{course}'""")
-        elif squad is not None:
+        elif self.squad is not None:
             query = QtSql.QSqlQuery(f"""SELECT fullname, squad, course FROM students WHERE squad='{squad}'""")
-        elif course is not None:
+        elif self.course is not None:
             query = QtSql.QSqlQuery(f"""SELECT fullname, squad, course FROM students WHERE course='{course}'""")
 
-        if squad is None and course is None:
+        if self.squad is None and self.course is None:
             query = QtSql.QSqlQuery("""SELECT fullname, squad, course FROM students""")
         model.setColumnCount(3)
         model.setHorizontalHeaderLabels(["ФИО", "Группа", "Курс"])
@@ -33,11 +39,14 @@ class TableStudent(QTableView):
             model.setItem(rows, 2, QStandardItem(str(query.value(2))))
         self.setFixedWidth(670)
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        self.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
 
-
+    def delete(self):
+        self.model().removeRows(0, self.model().rowCount())
 class MySortFilterProxyModel(QSortFilterProxyModel):
     def lessThan(self, source_left, source_right):
         if (source_left.isValid() and source_right.isValid()):
