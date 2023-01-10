@@ -1,14 +1,19 @@
-from PyQt5 import QtSql
+
+from PyQt5.QtSql import QSqlQuery
 from PyQt5.QtWidgets import QTableView, QAbstractItemView
 from PyQt5.QtCore import QSortFilterProxyModel
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 
 
-class TableBook(QTableView):
-    def __init__(self):
+class SearchBook(QTableView):
+    def __init__(self, title):
         super().__init__()
         model = QStandardItemModel()
-        query = QtSql.QSqlQuery("""SELECT title, release, type_book FROM books""")
+        query = QSqlQuery()
+        print(1)
+        query.exec(f""" SELECT title, release, type_book FROM books
+             WHERE title LIKE ('{title + '%'}')""")
+
         model.setColumnCount(3)
         model.setHorizontalHeaderLabels(["Название книги", "Дата выпуска", "Тип книги"])
         proxy = MySortFilterProxyModel()
@@ -25,7 +30,6 @@ class TableBook(QTableView):
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
-
 
 class MySortFilterProxyModel(QSortFilterProxyModel):
     def lessThan(self, source_left, source_right):
