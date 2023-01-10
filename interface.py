@@ -7,14 +7,35 @@ class Connect:
         self.cursor = self.sqlite_connection.cursor()
 
     def delete_student(self, numer_grade_book):
-        record = self.cursor.execute(f"SELECT id_record "
-                            f"FROM records "
-                            f"WHERE numer_grade_book={numer_grade_book}").fetchone()
-        print(record, "this record")
-        if record is not None:
-            self.cursor.execute(f"DELETE FROM records WHERE numer_grade_book={numer_grade_book}")
-        self.cursor.execute(f"DELETE FROM students WHERE numer_grade_book={numer_grade_book}")
+        try:
+            record = self.cursor.execute(f"SELECT id_record, return_date "
+                                f"FROM records "
+                                f"WHERE numer_grade_book={numer_grade_book}").fetchall()
+            print(record, "this record")
+            if len(record):
+                for i in record:
+                    if i[1] is None:
+                        return "У студента на руках есть книги!\nДля уделаения студента их быть не должно!!!"
+            if record is not None:
+                for i in record:
+                    print(record[1])
+                    self.cursor.execute(f"DELETE FROM records WHERE numer_grade_book={numer_grade_book}")
+                    print("Книга изъята")
+            self.cursor.execute(f"DELETE FROM students WHERE numer_grade_book={numer_grade_book}")
+            self.sqlite_connection.commit()
+            return"Запись успешно удалена"
+        except sqlite3.Error as error:
+            print("Ошибка при удалении записи с SQLite:", error, "!!!!!!")
 
+    def delete_book(self, id_books):
+        try:
+            self.cursor.execute("PRAGMA foreign_keys = ON")
+            self.cursor.execute(f"DELETE FROM books WHERE id_books={id_books}")
+            self.sqlite_connection.commit()
+            print("Книга списанна")
+            return"Запись успешно удалена"
+        except sqlite3.Error as error:
+            print("Ошибка при удалении записи с SQLite:", error, "!!!!!!")
 
 
     def get_student(self, fullname, squad, course):
@@ -81,5 +102,5 @@ class Connect:
 if __name__ == '__main__':
     a = Connect()
     # print(a.set_book_student("Курс математического анализа. Том 1", "2020", "Математический анализ")[0])
-    a.delete_student(1690307)
+    print(a.delete_book(3))
     a.close()
