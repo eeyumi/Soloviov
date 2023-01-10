@@ -81,7 +81,7 @@ class AddBook(QDialog):
         validator_number = QRegExpValidator(reg_number)
         self.line_release.setValidator(validator_number)
 
-        reg_count = QRegExp("[0-9]*")
+        reg_count = QRegExp("[0-9]{1,3}")
         validator_number = QRegExpValidator(reg_count)
         self.line_count.setValidator(validator_number)
 
